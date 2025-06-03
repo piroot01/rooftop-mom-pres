@@ -48,12 +48,12 @@
 \definecolor{PairedL}{RGB}{177,  89,  40}
 
 % template
-\setbeamercolor{structure}{fg = elmagBlueL}
+\setbeamercolor{structure}{fg = elmagGrayL}
 \setbeamercolor{palette primary}{bg = elmagBlack, fg = white} 	% strip: top right and bottom right
-\setbeamercolor{palette secondary}{bg = elmagBlueD, fg = white} % strip: bottom middle
-\setbeamercolor{palette tertiary}{bg = elmagBlueL, fg = white} 	% strip: top left and botttom left
-\setbeamercolor{title}{bg=white, fg = elmagBlueD} 				% title at title page
-\setbeamercolor{frametitle}{bg = elmagGrayL, fg = elmagBlueL} 	% frame title
+\setbeamercolor{palette secondary}{bg = elmagGrayD, fg = white} % strip: bottom middle
+\setbeamercolor{palette tertiary}{bg = elmagGrayL, fg = elmagBlack} 	% strip: top left and botttom left
+\setbeamercolor{title}{bg=white, fg = elmagGrayD} 				% title at title page
+\setbeamercolor{frametitle}{bg = elmagGrayL, fg = elmagBlack} 	% frame title
 \setbeamercolor{alerted text}{fg = elmagOrange}					% alert color
 \setbeamercolor{background canvas}{bg = white}    				% background color
 \hypersetup{
@@ -140,7 +140,11 @@
 		\end{centering}
 		\vskip1.5em\par
 		\begin{centering}
-			\usebeamerfont{author}\usebeamercolor[fg]{author}\insertauthor
+             \begin{tabu} to 0.75\textwidth {X[35,l] X[65,r]}
+                Author: & Supervisor: \\
+                \insertauthor & prof. Ing. Miloslav \v{C}apek, Ph.D. \\
+            \end{tabu}
+			% \usebeamerfont{author}\usebeamercolor[fg]{author}\insertauthor
 		\end{centering}
 		\vskip1em\par
 		\begin{centering}
