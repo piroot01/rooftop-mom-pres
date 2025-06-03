@@ -3,8 +3,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %default themes
 \usetheme{CambridgeUS}	% default theme
-\usecolortheme{whale} 	% default color theme
-\usefonttheme{serif} 	% default font theme
+\usefonttheme[onlymath]{serif}
+
 
 % Required packages
 % \RequirePackage[backend=bibtex, autocite=footnote, labelnumber=true, sortcites=true, backref=true, style=ieee, hyperref=true, sorting=nyt, block=none, mcite]{biblatex} % for references
@@ -58,10 +58,10 @@
 \setbeamercolor{background canvas}{bg = white}    				% background color
 \hypersetup{
 	colorlinks = true, 		% false: boxed links; true: colored links
-	linkcolor = elmagBlueL, % color of internal links
-	citecolor = elmagBlueL, % color of links to bibliography
-	filecolor = elmagBlueL,	% color of file links
-	urlcolor = elmagBlueL, 	% color of external links
+	linkcolor = black, % color of internal links
+	citecolor = black, % color of links to bibliography
+	filecolor = black,	% color of file links
+	urlcolor = black, 	% color of external links
 }
 
 % references
@@ -71,11 +71,6 @@
 
 % headline - reset colors of links in top strip
 \addtobeamertemplate{headline}{\hypersetup{allcolors = .}}{} % 
-
-% table of content - reset colors of links in TOC
-\let\tocOld\tableofcontents % coppy old definiton of TOC
-\renewcommand{\tableofcontents}{\hypersetup{allcolors = .}\tocOld} % set default (black) colors for links and call default TOC
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% THEME MODIFICATION
@@ -168,19 +163,19 @@
 %% LISTS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % itemize
-\setbeamertemplate{itemize item}{\color{elmagBlueL}$\blacktriangleright$}
-\setbeamertemplate{itemize subitem}{\color{elmagBlueL}$\blacktriangleright$}
-\setbeamertemplate{itemize subsubitem}{\color{elmagBlueL}$\blacktriangleright$}
+\setbeamertemplate{itemize item}{\color{elmagBlack}$\blacktriangleright$}
+\setbeamertemplate{itemize subitem}{\color{elmagBlack}$\blacktriangleright$}
+\setbeamertemplate{itemize subsubitem}{\color{elmagBlack}$\blacktriangleright$}
 
 % enumerate
 \setbeamertemplate{enumerate items}[default] % classical "points"
 \setbeamercolor{enumerate number projected}{fg = elmagBlack}
-\setbeamercolor*{enumerate item}{fg = elmagBlueL}
-\setbeamercolor*{enumerate subitem}{fg = elmagBlueL} 
-\setbeamercolor*{enumerate subsubitem}{fg = elmagBlueL}
+\setbeamercolor*{enumerate item}{fg = elmagBlack}
+\setbeamercolor*{enumerate subitem}{fg = elmagBlack} 
+\setbeamercolor*{enumerate subsubitem}{fg = elmagBlack}
 
 % list of references
-\setbeamertemplate{bibliography item}{\color{elmagBlueL}$\blacktriangleright$}
+\setbeamertemplate{bibliography item}{\color{elmagBlack}$\blacktriangleright$}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% BLOCKS
@@ -195,7 +190,7 @@
 \setbeamercolor{block body alerted}{bg = elmagGrayL, fg = black}
 
 % Example block:
-\setbeamercolor{block title example}{bg = elmagBlueD, fg = white}
+\setbeamercolor{block title example}{bg = elmagBlack, fg = white}
 \setbeamercolor{block body example}{bg = elmagGrayL, fg = black}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -205,12 +200,12 @@
 \setbeamerfont{caption}{series = \normalfont, size = \footnotesize} % smaller font
 \renewcommand{\figurename}{} % redefine prefix Figure
 \renewcommand{\tablename}{}  % redefine prefix Table
-\setbeamercolor{caption}{fg=elmagBlueD}
+\setbeamercolor{caption}{fg=elmagBlack}
 
 % set subfloats
 \captionsetup[subfloat]{%
-	font = {footnotesize, color = elmagBlueD},%
-	labelfont = {footnotesize, color = elmagBlueD}%
+	font = {footnotesize, color = elmagBlack},%
+	labelfont = {footnotesize, color = elmagBlack}%
 }
 
 % treatment of prefixes when babel is used with czech or english definition
@@ -226,7 +221,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% BUTTONS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\tikzstyle{elmagButton} = [fill, elmagBlueL, rounded corners = 2pt, text = white, inner xsep = 2mm, inner ysep = 1mm]
+\tikzstyle{elmagButton} = [fill, elmagBlack, rounded corners = 2pt, text = white, inner xsep = 2mm, inner ysep = 1mm]
 
 \renewcommand{\beamerbutton}[1]{\tikz \node[elmagButton]{\footnotesize \vphantom{Ty} #1};}
 \renewcommand{\beamergotobutton}[1]{\tikz \node[elmagButton]{\footnotesize \vphantom{Ty} $\blacktriangleright$ #1};}
@@ -234,23 +229,15 @@
 \renewcommand{\beamerreturnbutton}[1]{\tikz \node[elmagButton]{\footnotesize \vphantom{Ty} $\blacktriangleleft$ #1};}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% OUTLINE DESIGN
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\setbeamertemplate{section in toc}{%
-	\textcolor{elmagBlueL}{\inserttocsectionnumber.}~\inserttocsection}
-\setbeamertemplate{subsection in toc}{%
-	\hspace{1em}\textcolor{elmagBlueL}{\inserttocsectionnumber.\inserttocsubsectionnumber}~\inserttocsubsection\par}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% HANDOUT MODE - save color for printing version
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \mode<handout>{
-	\setbeamercolor{structure}{fg = elmagBlueL}
-	\setbeamercolor{palette primary}{bg = white, fg = black} 	% strip: top right and bottom right
+	\setbeamercolor{structure}{fg = elmagBlack}
+	\setbeamercolor{palette primary}{bg = white, fg = black} 	% strip: top right and boectom right
 	\setbeamercolor{palette secondary}{bg = white, fg = black}  % strip: bottom middle
 	\setbeamercolor{palette tertiary}{bg = white, fg = black} 	% strip: top left and botttom left
-	\setbeamercolor{title}{bg=white, fg = elmagBlueD} 			% title at title page
-	\setbeamercolor{frametitle}{bg = white, fg = elmagBlueL} 	% frame title
+	\setbeamercolor{title}{bg=white, fg = elmagBlack} 			% title at title page
+	\setbeamercolor{frametitle}{bg = white, fg = elmagBlack} 	% frame title
 	\setbeamercolor{alerted text}{fg = elmagOrange}				% alert color
 	\setbeamercolor{background canvas}{bg = white}    			% background color
 	

@@ -1,14 +1,16 @@
 \documentclass[t, aspectratio=169, 10pt]{beamer}
-\usepackage{elmagTemplate}
+\usepackage{include/customElmagTemplate}
+\usepackage{include/template}
+\usefonttheme{professionalfonts}
 
 % Utility packages
 \newcommand\SLASH{\char`\\} % Used for command examples
 \usepackage{array} % Array and tabular enhancements
 \newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}} % Centered column type
-\usepackage{amsmath, amssymb, amsfonts, physics, tabu, pgfplots}
+\usepackage{tabu}
+\usepackage{physics}
 \usepackage{tikz-3dplot}
 
-\usepackage[school,simplified]{pgf-umlcd}
 \usetikzlibrary{calc}
 \usetikzlibrary{positioning}
 \usetikzlibrary{shapes.geometric, arrows}
@@ -36,6 +38,14 @@
 % Outline
 \begin{frame}{Outline}
     \tableofcontents
+\end{frame}
+
+\section{The problem description}
+\begin{frame}{The problem description}
+    \begin{itemize}
+        \item Consider antenna topology $\Omega$.
+        \item We want to know the curret $J$ under exciting field $\V{E}_{\mathrm{inc}}$.
+    \end{itemize}
 \end{frame}
 
 \section*{Questions}

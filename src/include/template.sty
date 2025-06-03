@@ -1,0 +1,182 @@
+%%
+%% template
+%%
+
+
+%
+% basic packages and settings
+%
+
+
+% font settings
+\usepackage[Symbol]{upgreek}
+\usepackage[greek,english]{babel}
+\usepackage{fontspec}
+
+% packages for tikz
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% algoritms
+\usepackage{algorithmic}
+\usepackage{setspace}
+
+%
+% math
+%
+
+
+% for avoiding \mbox{} everywhere...
+\relpenalty=10000
+\binoppenalty=10000
+
+% avid singletons
+\widowpenalty=10000
+\clubpenalty=10000
+
+% basic constants, and math objects
+\providecommand{\I}{\ensuremath{\mathrm{i}}} % imaginary unit
+\providecommand{\RE}{\ensuremath{\mathrm{Re}}} % real part of...
+\providecommand{\IM}{\ensuremath{\mathrm{Im}}} % imaginary part of...
+\providecommand{\Quot}[1]{``{#1}"} % quotation
+\providecommand{\D}{\,\mathrm{d}} % d for integral
+\providecommand{\V}[1]{\vb*{#1}} % vector
+\providecommand{\M}[1]{\mathbf{#1}} % matrix
+\providecommand{\T}[1]{\vb*{\mathcal{#1}}} % tensor
+%\providecommand{\T}[1]{\mathrm{#1}} % upright text (subindex, superindex,..)
+\providecommand{\UV}[1]{\V{\hat{#1}}} % unit vector
+\providecommand{\NORM}[1]{\left\| #1 \right\|} % norm
+\providecommand{\ABS}[1]{\left| #1 \right|} % absolute value
+\providecommand{\OP}[1]{{\mathcal{#1}}} % operator
+\providecommand{\R}{\mathbb{R}}
+\providecommand{\N}{\mathbb{N}}
+\providecommand{\Z}{\mathbb{Z}}
+\providecommand{\C}{\mathbb{C}}
+\providecommand{\herm}{\mathrm{H}} 
+\providecommand{\trans}{\mathrm{T}}
+\providecommand{\mySubj}{\mathrm{subj.}}
+
+% smaller version of a math symbol
+\providecommand{\smallmathcal}[1]{
+    \mathchoice
+    {{\scriptstyle\mathcal{#1}}} % \displaystyle
+    {{\scriptstyle\mathcal{#1}}} % \textstyle
+    {{\scriptscriptstyle\mathcal{#1}}} % \scriptstyle
+    {\scalebox{.7}{$\scriptscriptstyle\mathcal{#1}$}} %\scriptscriptstyle
+}
+
+
+% Bessels, Neumann, Hankel functions
+\providecommand{\JBSL}[2]{\mathrm{j}_{#1} \left( #2 \right)}  
+\providecommand{\YBSL}[2]{\mathrm{y}_{#1} \left( #2 \right)}
+\providecommand{\HBSL}[3]{\mathrm{h}_{#1}^{(#2)} \left( #3 \right)}
+
+% spherical waves
+\providecommand{\UFCN}[3]{\M{u}_{#1}^{\left( #2 \right)} \left(#3\right)}
+\providecommand{\RFCN}[3]{\mathrm{R}_{#1}^{\left( #2 \right)} \left(#3\right)}
+\providecommand{\YFCN}[2]{\M{Y}_{#1}\left(#2\right)}
+\providecommand{\YFCNs}[2]{\mathrm{Y}_{#1}\left(#2\right)}
+\providecommand{\AFCN}[2]{\M{A}_{#1}\left(#2\right)}
+\providecommand{\PFCNn}[3]{\tilde{\mathrm{P}}_{#1}^{#2}\left(#3\right)}
+
+% constants (keep them as LaTeX variables)
+\providecommand*{\EPS}{\ensuremath{\varepsilon_0}} % permittivity
+\providecommand*{\MUE}{\ensuremath{\mu_0}} % permeability
+\providecommand*{\SIGMA}{\ensuremath{\sigma}} % conductivity
+\providecommand{\ZVAC}{\ensuremath{Z_0}} % impedance of vacuum
+\providecommand*{\KZ}{\ensuremath{k_0}} % wave number
+
+% geometry, basis functions
+\providecommand{\srcRegion}{\ensuremath{\varOmega}} 
+\providecommand{\basisFcn}{\V{\psi}}
+\providecommand{\BFpol}{\chi}
+\providecommand{\Ivec}{\ensuremath{\M{I}}}
+\providecommand{\Vvec}{\ensuremath{\M{V}}}
+\providecommand{\Fvec}{\ensuremath{\M{F}}}
+\providecommand{\Mvec}{\ensuremath{\M{m}}}
+\providecommand{\Pvec}{\ensuremath{\M{p}}}
+\providecommand{\Eveci}{\ensuremath{\V{E}_\T{i}}}
+\providecommand{\Evecs}{\ensuremath{\V{E}_\T{s}}}
+\providecommand{\zvecL}{\ensuremath{\V{z}_\T{L}}}
+\providecommand{\vvec}{\ensuremath{\V{v}}}
+\providecommand{\yvec}{\ensuremath{\M{y}}}
+\providecommand{\Jvec}{\ensuremath{\V{J}}}
+
+% matrix operators
+\providecommand{\BFmat}{\ensuremath{\V{\Psi}}}
+\providecommand{\Rmat}{\ensuremath{\M{R}}}
+\providecommand{\Lmat}{\ensuremath{\M{L}}}
+\providecommand{\Xmat}{\ensuremath{\M{X}}}
+\providecommand{\Zmat}{\ensuremath{\M{Z}}}
+\providecommand{\ZmatE}{\ensuremath{\M{Z}_{\text{e}}}}
+\providecommand{\ZmatM}{\ensuremath{\M{Z}}_{\text{m}}}
+\providecommand{\RmatFS}{\ensuremath{\M{R}_\M{G}}}
+\providecommand{\XmatFS}{\ensuremath{\M{X}_\M{G}}}
+\providecommand{\ZmatFS}{\ensuremath{\M{Z}_\M{G}}}
+\providecommand{\YmatFS}{\ensuremath{\M{Y}_\M{G}}}
+\providecommand{\ZmatL}{\ensuremath{\M{Z}_\T{L}}}
+\providecommand{\Ymat}{\ensuremath{\M{Y}}}
+\providecommand{\Smat}{\ensuremath{\M{S}}}
+\providecommand{\Umat}{\ensuremath{\M{U}}}
+\providecommand{\XEmat}{\ensuremath{\M{X}_\T{e}}}
+\providecommand{\XMmat}{\ensuremath{\M{X}_\T{m}}}
+\providecommand{\XDmat}{\ensuremath{\M{X}'}}
+\providecommand{\Wmat}{\ensuremath{\M{W}}}
+\providecommand{\Cmat}{\ensuremath{\M{C}}}
+\providecommand{\Imat}{\ensuremath{\M{I}}}
+
+% input impedance-related paramters
+\providecommand{\Rin}{\ensuremath{R_\T{in}}}
+\providecommand{\Xin}{\ensuremath{X_\T{in}}}
+\providecommand{\Zin}{\ensuremath{Z_\T{in}}}
+
+% antenna parameters
+\providecommand{\surfres}{R_\T{s}}
+\providecommand{\radeff}{\eta}
+\providecommand{\dissipfact}{\delta}
+\providecommand{\Prad}{P_\T{rad}}
+\providecommand{\Preact}{P_\T{react}}
+\providecommand{\Plost}{P_\T{lost}}
+\providecommand{\Wrad}{\ensuremath{W_\mathrm{rad}}}
+\providecommand{\Wsto}{\ensuremath{W_\mathrm{sto}}}
+\providecommand{\We}{\ensuremath{W_\mathrm{e}}}
+\providecommand{\Wm}{\ensuremath{W_\mathrm{m}}}
+
+% units
+\providecommand{\Ohm}{\Omega}
+
+% bizzare math expressions
+\providecommand{\RR}{\|\V{r} - \V{r}'\|}
+\providecommand{\XX}{\|\V{x} - \V{x}'\|}
+\providecommand{\GFE}{\mathrm{e}^{-\I\KZ\RR}}
+\providecommand{\PSII}{\V{\Psi}_i}
+\providecommand{\PSIJ}{\V{\Psi}_j}
+\providecommand{\PSIM}{\V{\Psi}_{\V{m}}}
+\providecommand{\PSIN}{\V{\Psi}_{\V{n}}}
+\providecommand{\DFT}{\mathrm{DFT}}
+\providecommand{\xdir}{\mathrm{x}}
+\providecommand{\ydir}{\mathrm{y}}
+\providecommand{\zdir}{\mathrm{z}}
+
+% style
+\newcommand{\ie}{\textit{i}.\textit{e}.{}} 
+\newcommand{\eg}{\textit{e}.\textit{g}.{}}
+\newcommand{\cf}{\textit{cf}.{}}
+
+% acronyms
+\RequirePackage[nolist]{acronym}
+\newacro{MoM}[MoM]{method of moments}
+\newacro{MOO}[MOO]{multiobjective optimization}
+\newacro{CM}[CM]{characteristic mode}
+\newacro{PEC}[PEC]{perfect electric conductor}
+\newacro{PMC}[PMC]{perfect magnetic conductor}
+\newacro{EP}[EP]{eigenvalue problem}
+\newacro{GEP}[GEP]{generalized eigenvalue problem}
+\newacro{EFIE}[EFIE]{electric field integral equation}
+\newacro{SVD}[SVD]{singular value decomposition}
+\newacro{RWG}[RWG]{Rao-Wilton-Glisson}
+\newacro{EM}[EM]{electromagnetic}
+\newacro{dof}[d-o-f]{\mbox{degrees-of-freedom}}
+
