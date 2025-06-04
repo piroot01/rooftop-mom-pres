@@ -7,7 +7,7 @@
 \usefonttheme{serif} 	% default font theme
 
 % Required packages
-% \RequirePackage[backend=bibtex, autocite=footnote, labelnumber=true, sortcites=true, backref=true, style=ieee, hyperref=true, sorting=nyt, block=none, mcite]{biblatex} % for references
+\RequirePackage[backend=bibtex, autocite=footnote, labelnumber=true, sortcites=true, backref=true, style=ieee, hyperref=true, sorting=nyt, block=none, mcite]{biblatex} % for references
 \RequirePackage{booktabs} % for better spacing in tables
 \RequirePackage[justification=centering]{caption} % center captions
 \RequirePackage{hyperref} % for hyperrefs
@@ -19,7 +19,7 @@
 % \newcommand{\affiliation}[1]{\texorpdfstring{\textsuperscript{#1}}{(#1)}}
 
 % Patch of footnomark allowing usage of labels
-% \patchcmd{\footnotemark}{\stepcounter{footnote}}{\refstepcounter{footnote}}{}{}
+\patchcmd{\footnotemark}{\stepcounter{footnote}}{\refstepcounter{footnote}}{}{}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -87,7 +87,7 @@
 \addtobeamertemplate{frametitle}{}{%
 	\begin{tikzpicture}[remember picture, overlay]
 	\node[anchor = north east, yshift = -\headheight] at (current page.north east) {%
-		\href{https://www.cvut.cz/en}{\includegraphics[height=0.8cm]{logoCTU-black}}
+		\href{https://www.cvut.cz/en}{\includegraphics[height=0.8cm]{images/logoCTU-black}}
 	};
 	\end{tikzpicture}} 
 
@@ -161,7 +161,7 @@
 
 % background at title page
 \titlegraphic{\begin{tikzpicture}[remember picture, overlay]%
-	\node[opacity = 0.03, anchor = south east, yshift = \footheight] at (current page.south east) {\includegraphics[height = 0.6\paperheight, keepaspectratio]{logoCTU-blue}};
+	\node[opacity = 0.03, anchor = south east, yshift = \footheight] at (current page.south east) {\includegraphics[height = 0.6\paperheight, keepaspectratio]{images/logoCTU-blue}};
 	\end{tikzpicture}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

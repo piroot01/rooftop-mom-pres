@@ -1,0 +1,51 @@
+\documentclass[tikz]{standalone}
+\usepackage{../include/template}
+\usepackage{tikz-3dplot}
+\usetikzlibrary{calc}
+\usetikzlibrary{shapes.geometric, arrows}
+\usepackage{physics}
+
+% colorbrewer Paired-12
+\definecolor{PairedA}{RGB}{166, 206, 227}
+\definecolor{PairedB}{RGB}{ 31, 120, 180}
+\definecolor{PairedC}{RGB}{178, 223, 138} 
+\definecolor{PairedD}{RGB}{ 41, 128,  35}   % made darker by 20%
+\definecolor{PairedE}{RGB}{251, 154, 153}
+\definecolor{PairedF}{RGB}{182,  21,  22}   % made darker by 20%
+\definecolor{PairedG}{RGB}{253, 191, 111}
+\definecolor{PairedH}{RGB}{255, 127,   0}
+\definecolor{PairedI}{RGB}{202, 178, 214}
+\definecolor{PairedJ}{RGB}{106,  61, 154}
+\definecolor{PairedK}{RGB}{255, 255, 153}
+\definecolor{PairedL}{RGB}{177,  89,  40}
+
+\RequirePackage{mathtools}
+\RequirePackage{booktabs}
+\RequirePackage{tabu}
+\RequirePackage{makecell}
+\RequirePackage{multirow}
+\RequirePackage{enumerate}
+\RequirePackage{placeins}
+\RequirePackage{mathdesign}
+\RequirePackage{float}
+\RequirePackage{csquotes}
+
+\begin{document}
+    \tdplotsetmaincoords{60}{50}
+    \begin{tikzpicture}[tdplot_main_coords,line cap=round, line join=round]
+        \coordinate (O) at (0,0,0);
+
+        \def\dx{1}
+        \def\dy{1}
+        \def\lx{5 * \dx}
+        \def\ly{3 * \dy}
+        \def\roofh{1}
+
+        \draw[thick, fill = PairedK] (0, 0, 0) -- (\lx, 0, 0) -- (\lx, \ly, 0) -- (0, \ly, 0) -- cycle;
+        \draw[thick, ->, line cap=round, >=stealth] (\dx, \ly/2, 0) to [out=30, in=-140] (4 * \dx, \ly/2, 0) node[above=6mm, left=4mm] {$\V{J}$};
+        \draw[thick, <-, line cap=round, >=stealth] (1.5 * \dx, 1.2 * \ly, 0) to [out=40, in=40] (3.5 * \dx, 1.2 * \ly, 0) node[above=10mm, left=-3mm] {$\V{E}_{\text{inc}}$};
+
+        \node[below] at (2.5 * \dx, -0.2 * \dy, 0) {$\Omega$};
+    \end{tikzpicture}
+\end{document}
+

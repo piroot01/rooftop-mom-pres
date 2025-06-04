@@ -3,6 +3,9 @@
 \usepackage{include/template}
 \usefonttheme{professionalfonts}
 
+\bibliography{bib/core}
+\bibliography{bib/extra}
+
 % Utility packages
 \newcommand\SLASH{\char`\\} % Used for command examples
 \usepackage{array} % Array and tabular enhancements
@@ -44,8 +47,25 @@
 \begin{frame}{The problem description}
     \begin{itemize}
         \item Consider antenna topology $\Omega$.
-        \item We want to know the curret $J$ under exciting field $\V{E}_{\mathrm{inc}}$.
+        \item We want to know the current $\V{J}$ under exciting field $\V{E}_{\mathrm{inc}}$.
     \end{itemize}
+    \vspace{1cm}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.5\textwidth]{images/problem_descr.pdf}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Operators for further radiator description}
+    \begin{columns}
+        \begin{column}[t]{0.5\textwidth}
+            \begin{block}{Far field\footnotemark[1]}
+                \begin{equation*}
+                    F(\vu*{r}, \vu*{e}) = \frac{-\I \ZVAC \KZ}{4 \uppi}\int_{\Omega} \vu*{e}\vdot \V{J}(\V{r}') \mathrm{e}^{\I k \vu*{r}\vdot \V{r}'} \D{\Omega}
+                \end{equation*}
+            \end{block}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \section*{Questions}

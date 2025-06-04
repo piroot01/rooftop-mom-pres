@@ -12,11 +12,13 @@
 \RequirePackage{subfig} % for subfigures
 \RequirePackage{xcolor} % for defines colors
 
+\RequirePackage[backend=bibtex, autocite=footnote, labelnumber=true, sortcites=true, backref=true, style=ieee, hyperref=true, sorting=nyt, block=none, mcite]{biblatex} 
+
 % command for affiliation - fist arg: tex (superscript is used), second arg: bookrefs (brackets are used)
 % \newcommand{\affiliation}[1]{\texorpdfstring{\textsuperscript{#1}}{(#1)}}
 
 % Patch of footnomark allowing usage of labels
-% \patchcmd{\footnotemark}{\stepcounter{footnote}}{\refstepcounter{footnote}}{}{}
+%\patchcmd{\footnotemark}{\stepcounter{footnote}}{\refstepcounter{footnote}}{}{}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -63,6 +65,7 @@
 % table of content - reset colors of links in TOC
 \let\tocOld\tableofcontents % coppy old definiton of TOC
 \renewcommand{\tableofcontents}{\hypersetup{allcolors = .}\tocOld} % set default (black) colors for links and call default TOC
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% THEME MODIFICATION
@@ -158,3 +161,65 @@
 	\textcolor{elmagBlack}{\inserttocsectionnumber.}~\inserttocsection}
 \setbeamertemplate{subsection in toc}{%
 	\hspace{1em}\textcolor{elmagBlack}{\inserttocsectionnumber.\inserttocsubsectionnumber}~\inserttocsubsection\par}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% LISTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% itemize
+\setbeamertemplate{itemize item}{\color{elmagBlack}$\blacktriangleright$}
+\setbeamertemplate{itemize subitem}{\color{elmagBlack}$\blacktriangleright$}
+\setbeamertemplate{itemize subsubitem}{\color{elmagBlack}$\blacktriangleright$}
+
+% enumerate
+\setbeamertemplate{enumerate items}[default] % classical "points"
+\setbeamercolor{enumerate number projected}{fg = elmagBlack}
+\setbeamercolor*{enumerate item}{fg = elmagBlueL}
+\setbeamercolor*{enumerate subitem}{fg = elmagBlueL} 
+\setbeamercolor*{enumerate subsubitem}{fg = elmagBlueL}
+
+% list of references
+\setbeamertemplate{bibliography item}{\color{elmagBlueL}$\blacktriangleright$}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% BLOCKS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setbeamertemplate{blocks}[rounded][shadow = false] % first argument: rounded / default. If rounded, second argument: shadow = true/false
+% Standard block:
+\setbeamercolor{block title}{bg = elmagGrayD, fg = white}
+\setbeamercolor{block body}{bg = elmagGrayL, fg = black}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% CAPTIONS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setbeamertemplate{caption label separator}{} % clear separator (":") between Fig. and Tab.
+\setbeamerfont{caption}{series = \normalfont, size = \footnotesize} % smaller font
+\renewcommand{\figurename}{} % redefine prefix Figure
+\renewcommand{\tablename}{}  % redefine prefix Table
+\setbeamercolor{caption}{fg=elmagBlueD}
+
+% set subfloats
+\captionsetup[subfloat]{%
+	font = {footnotesize, color = elmagBlueD},%
+	labelfont = {footnotesize, color = elmagBlueD}%
+}
+
+% treatment of prefixes when babel is used with czech or english definition
+\makeatletter
+\@ifpackageloaded{babel}{
+	\addto\captionsczech{\renewcommand{\figurename}{}}%
+	\addto\captionsczech{\renewcommand{\tablename}{}}%
+	\addto\captionsenglish{\renewcommand{\figurename}{}}%
+	\addto\captionsenglish{\renewcommand{\tablename}{}}%
+}{}
+\makeatother 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% BUTTONS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tikzstyle{elmagButton} = [fill, elmagBlueL, rounded corners = 2pt, text = white, inner xsep = 2mm, inner ysep = 1mm]
+
+\renewcommand{\beamerbutton}[1]{\tikz \node[elmagButton]{\footnotesize \vphantom{Ty} #1};}
+\renewcommand{\beamergotobutton}[1]{\tikz \node[elmagButton]{\footnotesize \vphantom{Ty} $\blacktriangleright$ #1};}
+\renewcommand{\beamerskipbutton}[1]{\tikz \node[elmagButton]{\footnotesize \vphantom{Ty} $\blacktriangleright$\hspace{-1mm}$\blacktriangleright$ #1};}
+\renewcommand{\beamerreturnbutton}[1]{\tikz \node[elmagButton]{\footnotesize \vphantom{Ty} $\blacktriangleleft$ #1};}
+
