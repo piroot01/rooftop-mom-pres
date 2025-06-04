@@ -5,6 +5,8 @@
 \usetheme{CambridgeUS}	% default theme
 \usefonttheme{serif} 	% default font theme
 
+\RequirePackage[backend=bibtex, autocite=footnote, labelnumber=true, sortcites=true, backref=true, style=ieee, hyperref=true, sorting=nyt, block=none, mcite]{biblatex} 
+
 \RequirePackage{booktabs} % for better spacing in tables
 \RequirePackage[justification=centering]{caption} % center captions
 \RequirePackage{hyperref} % for hyperrefs
@@ -12,13 +14,16 @@
 \RequirePackage{subfig} % for subfigures
 \RequirePackage{xcolor} % for defines colors
 
-\RequirePackage[backend=bibtex, autocite=footnote, labelnumber=true, sortcites=true, backref=true, style=ieee, hyperref=true, sorting=nyt, block=none, mcite]{biblatex} 
+\RequirePackage{tabu}
+\RequirePackage{physics, amsmath, amssymb, amsfonts, mathtools}
+\usepackage[Symbol]{upgreek}
+
 
 % command for affiliation - fist arg: tex (superscript is used), second arg: bookrefs (brackets are used)
 % \newcommand{\affiliation}[1]{\texorpdfstring{\textsuperscript{#1}}{(#1)}}
 
 % Patch of footnomark allowing usage of labels
-%\patchcmd{\footnotemark}{\stepcounter{footnote}}{\refstepcounter{footnote}}{}{}
+\patchcmd{\footnotemark}{\stepcounter{footnote}}{\refstepcounter{footnote}}{}{}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -65,6 +70,13 @@
 % table of content - reset colors of links in TOC
 \let\tocOld\tableofcontents % coppy old definiton of TOC
 \renewcommand{\tableofcontents}{\hypersetup{allcolors = .}\tocOld} % set default (black) colors for links and call default TOC
+% references
+\setbeamercolor*{bibliography entry journal}{fg = elmagBlack} 
+\setbeamercolor*{bibliography entry author}{fg = elmagBlack} 
+\setbeamercolor*{bibliography entry note}{fg = elmagBlack}
+\DeclareCiteCommand{\fullcite} {\usebibmacro{prenote}} {\usedriver {} {\thefield{entrytype}}\addperiod} {\multicitedelim} {\usebibmacro{postnote}}
+% headline - reset colors of links in top strip
+\addtobeamertemplate{headline}{\hypersetup{allcolors = .}}{} % 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

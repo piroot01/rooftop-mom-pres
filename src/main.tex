@@ -3,22 +3,13 @@
 \usepackage{include/template}
 \usefonttheme{professionalfonts}
 
-\bibliography{bib/core}
-\bibliography{bib/extra}
-
 % Utility packages
 \newcommand\SLASH{\char`\\} % Used for command examples
 \usepackage{array} % Array and tabular enhancements
 \newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}} % Centered column type
-\usepackage{tabu}
-\usepackage{physics}
-\usepackage{tikz-3dplot}
 
-\usetikzlibrary{calc}
-\usetikzlibrary{positioning}
-\usetikzlibrary{shapes.geometric, arrows}
-\usepackage{matlab-prettifier}
-\usepackage{mathtools}
+\bibliography{bib/core}
+\bibliography{bib/extra}
 
 \title{Method of Moments for Analysis of Planar Radiators}
 \subtitle{Rooftop approach and acceleration techniques}
@@ -46,7 +37,7 @@
 \section{The problem description}
 \begin{frame}{The problem description}
     \begin{itemize}
-        \item Consider antenna topology $\Omega$.
+        \item Consider antenna topology $\Omega$ made from a perfect conductor.
         \item We want to know the current $\V{J}$ under exciting field $\V{E}_{\mathrm{inc}}$.
     \end{itemize}
     \vspace{1cm}
@@ -56,18 +47,71 @@
     \end{figure}
 \end{frame}
 
+\begin{frame}{Equation formulation}
+    \begin{itemize}
+        \item The problem can be mathematically formulated using EFIE\footnotemark[1]
+    \end{itemize}
+    \begin{equation}
+        [\V{E}_{\text{inc}}(\V{r})]_{\text{tan}} = \I\KZ\ZVAC \int_{\Omega} \left(\M{I} + \frac{\nabla \otimes \nabla}{\KZ^2}\right)g(\V{r}, \V{r}')\V{J}(\V{r}')\D{\V{r}'},
+    \end{equation}
+    where $g$ is the 3D scalar Green's function.
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.45\textwidth]{images/greens_function.pdf}
+    \end{figure}
+
+    \footnotetext[1]{\fullcite{Harrington_FieldComputationByMoM}}
+\end{frame}
+
 \begin{frame}{Operators for further radiator description}
     \begin{columns}
-        \begin{column}[t]{0.5\textwidth}
+        \begin{column}[t]{0.49\textwidth}
             \begin{block}{Far field\footnotemark[1]}
                 \begin{equation*}
-                    F(\vu*{r}, \vu*{e}) = \frac{-\I \ZVAC \KZ}{4 \uppi}\int_{\Omega} \vu*{e}\vdot \V{J}(\V{r}') \mathrm{e}^{\I k \vu*{r}\vdot \V{r}'} \D{\Omega}
+                    F(\vu*{r}, \vu*{e}) = \frac{-\I \ZVAC \KZ}{4 \uppi}\int_{\Omega} \vu*{e}\vdot \V{J}(\V{r}') \mathrm{e}^{\I k \vu*{r}\vdot \V{r}'} \D{\V{r}'}
+                \end{equation*}
+            \end{block}
+        \end{column}
+        \begin{column}[t]{0.49\textwidth}
+            \begin{block}{Radiation intensity\footnotemark[1]}
+                \begin{equation*}
+                    U(\vu*{r}, \vu*{e}) = \frac{1}{2\ZVAC} |F(\vu*{r}, \vu*{e})|^2
+                \end{equation*}
+            \end{block}
+        \end{column}
+    \end{columns}
+<<<<<<< Updated upstream
+
+    \footnotetext{aaa}
+=======
+    \begin{columns}
+        \centering
+        \begin{column}[t]{0.5\textwidth}
+            \begin{block}{Directivity\footnotemark[1]}
+                \begin{equation*}
+                    D(\vu*{r}, \vu*{e}) = \frac{4\uppi U(\vu*{r}, \vu*{r})}{P_{\text{rad}}}
                 \end{equation*}
             \end{block}
         \end{column}
     \end{columns}
 
-    \footnotetext{aaa}
+    \footnotetext[1]{\fullcite{Masek_etal_EuCAP2018_CMgroupTracking}}
+\end{frame}
+
+\begin{frame}{Optimalization of the radiator topology}
+    \begin{itemize}
+        \item How to make the radiator shape such that it is optimal for given conditions.
+    \end{itemize}
+
+    [[here i would like to place an image of an ideal radiator from a paper density based topology optimalization - Jonas Tucek, Miloslav Capek]]
+\end{frame}
+
+\section{Solution via MoM}
+\begin{frame}{Solution via Method-of-Moments paradigm}
+    \begin{itemize}
+        \item All quantities
+    \end{itemize}
+>>>>>>> Stashed changes
 \end{frame}
 
 \section*{Questions}
