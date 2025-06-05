@@ -14,10 +14,15 @@
 \RequirePackage{subfig} % for subfigures
 \RequirePackage{xcolor} % for defines colors
 
+\usepackage{csquotes}
 \RequirePackage{tabu}
 \RequirePackage{physics, amsmath, amssymb, amsfonts, mathtools}
 \usepackage[Symbol]{upgreek}
 
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
 
 % command for affiliation - fist arg: tex (superscript is used), second arg: bookrefs (brackets are used)
 % \newcommand{\affiliation}[1]{\texorpdfstring{\textsuperscript{#1}}{(#1)}}
@@ -185,9 +190,9 @@
 % enumerate
 \setbeamertemplate{enumerate items}[default] % classical "points"
 \setbeamercolor{enumerate number projected}{fg = elmagBlack}
-\setbeamercolor*{enumerate item}{fg = elmagBlueL}
-\setbeamercolor*{enumerate subitem}{fg = elmagBlueL} 
-\setbeamercolor*{enumerate subsubitem}{fg = elmagBlueL}
+\setbeamercolor*{enumerate item}{fg = elmagBlack}
+\setbeamercolor*{enumerate subitem}{fg = elmagBlack} 
+\setbeamercolor*{enumerate subsubitem}{fg = elmagBlack}
 
 % list of references
 \setbeamertemplate{bibliography item}{\color{elmagBlueL}$\blacktriangleright$}

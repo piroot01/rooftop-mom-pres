@@ -1,0 +1,53 @@
+\begin{tikzpicture}[cap=round]
+\begin{semilogyaxis}[
+    width=0.8\textwidth,
+    height=0.4\textwidth,
+    xlabel={quadrature order},
+    ylabel={absolute error},
+    legend style={at={(0.98,0.5)},anchor=east},
+    grid=major,
+    xmin=5,
+    xmax=15
+]
+
+\addplot[
+    mark=* ,
+    mark options={scale=0.3, fill=PairedE},
+    color=PairedF,
+    line width=0.5mm,
+] coordinates {
+    (5, 0.353157033214646e-4)
+    (6, 0.214202553875803e-4)
+    (7, 0.139639261592106e-4)
+    (8, 0.096062918149495e-4)
+    (9, 0.068898243926196e-4)
+    (10, 0.051087279871187e-4)
+    (11, 0.038924965730588e-4)
+    (12, 0.030337506874284e-4)
+    (13, 0.024101920206229e-4)
+    (14, 0.019464965878707e-4)
+    (15, 0.015945372590018e-4)
+};
+
+\addplot[
+    mark=* ,
+    mark options={scale=0.3, fill=PairedA},
+    color=PairedB,
+    line width=0.5mm,
+] coordinates {
+    (5, 0.272677887491746e-7)
+    (6, 0.115684837542762e-7)
+    (7, 0.056020037914051e-7)
+    (8, 0.029804639728459e-7)
+    (9, 0.017036676513982e-7)
+    (10, 0.010307154713063e-7)
+    (11, 0.006529828622259e-7)
+    (12, 0.004297559669242e-7)
+    (13, 0.002920470532075e-7)
+    (14, 0.002039453328440e-7)
+    (15, 0.001457915732583e-7)
+};
+
+\legend{classical extraction, stronger extraction}
+\end{semilogyaxis}
+\end{tikzpicture}
