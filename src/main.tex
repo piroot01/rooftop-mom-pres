@@ -318,12 +318,48 @@
 \end{frame}
 
 \section*{Singularity extraction}
+\begin{frame}{Computation of the singular integrals}
+    \begin{itemize}
+        \item For demonstration purposes, we consider the following extracted integral
+        \begin{equation*}
+            \int_{\Omega_i}\int_{\Omega_i} \PSII^{+}(\V{r}) \vdot \PSII^{+}(\V{r}') \frac{1}{\|\V{r} - \V{r}'\|}\D{\V{r}'}\D{\V{r}}.
+        \end{equation*}
+        We then apply the transformations $\psi$ and $\phi$ as defined in the thesis.
+    \end{itemize}
+    \begin{figure}[ht]
+        \centering
+        \includegraphics[width=0.8\textwidth]{images/singularity_extraction.pdf}
+    \end{figure}
+\end{frame}
+
 \begin{frame}
     \begin{itemize}
-        \item Assume that $a, b > 0$
+        \item Under the assumption of a uniform orthogonal mesh on the radiator and $a,b>0$, the integral splits into four contributions of the form
+        \begin{equation*}
+            a^2b^2 \int\int\int\int \frac{(u + \lambda_1')\lambda_1'}{\sqrt{a^2 u^2 + b^2 v^2}}\dd{\lambda_1'}\dd{v}\dd{u}.
+        \end{equation*}
+        The corresponding limits in each subregion are:
+        \[
+            \begin{tabu}{r l l}
+                \text{I:}&\lambda_1'\in(0,1-u),&\lambda_2'\in(0,1-v), \\
+                \text{II:}&\lambda_1'\in(-u,1),&\lambda_2'\in(0,1-v), \\
+                \text{III:}&\lambda_1'\in(-u,1),&\lambda_2'\in(-v,1), \\
+                \text{IV:}&\lambda_1'\in(0,1-u),&\lambda_2'\in(-v,1).
+            \end{tabu}
+        \]
+        Hence
+        \begin{equation*}
+            \mathcal{I}^{(-1)}[\lambda_1\lambda_1'] = \mathcal{I}_{\text{I}}^{(-1)}[\lambda_1\lambda_1'] + \mathcal{I}_{\text{II}}^{(-1)}[\lambda_1\lambda_1'] + \mathcal{I}_{\text{III}}^{(-1)}[\lambda_1\lambda_1'] + \mathcal{I}_{\text{IV}}^{(-1)}[\lambda_1\lambda_1']
+        \end{equation*}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \begin{itemize}
+        \item  We now compute the contribution over subregion I.
     \end{itemize}
     \begin{align*}
-        \mathcal{I}^{(-1)}[\lambda_1\lambda_1'] &= a^2 b^2 \int_{0}^{1}\int_{0}^{1}\int_{0}^{1-u}\int_{0}^{1-v} \frac{(u + \lambda_1')\lambda_1'}{\sqrt{a^2 u^2 + b^2 v^2}}\D{\lambda_2'}\D{\lambda_1'}\D{v}\D{u} \\
+        \mathcal{I}_{\text{I}}^{(-1)}[\lambda_1\lambda_1'] &= a^2 b^2 \int_{0}^{1}\int_{0}^{1}\int_{0}^{1-u}\int_{0}^{1-v} \frac{(u + \lambda_1')\lambda_1'}{\sqrt{a^2 u^2 + b^2 v^2}}\D{\lambda_2'}\D{\lambda_1'}\D{v}\D{u} \\
         &= a^2 b^2 \int_{0}^{1}\int_{0}^{1} \frac{1 - v}{\sqrt{a^2 u^2 + b^2 v^2}} \int_{0}^{1-u} (u + \lambda_1') \lambda_1'\D{\lambda_1'}\D{v}\D{u} \\
         &= a^2 b^2 \int_{0}^{1}\int_{0}^{1} \frac{1 - v}{\sqrt{a^2 u^2 + b^2 v^2}} \underbrace{\left( \frac{1}{3} - \frac{1}{2}u + \frac{1}{6}u^3\right)}_{F_1(u)}\D{v} \D{v} \\
         &= a^2 b^2 \int_{0}^{1} F_1(u) \left(\int_{0}^{1}  \frac{1}{\sqrt{a^2 u^2 + b^2 v^2}} \D{v} - \int_{0}^{1}  \frac{v}{\sqrt{a^2 u^2 + b^2 v^2}} \D{v}\right) \D{u}
@@ -332,14 +368,16 @@
 
 \begin{frame}
     \begin{equation*}
-        \int_{0}^{1}  \frac{1}{\sqrt{a^2 u^2 + b^2 v^2}} \D{v} \overset{(\textcolor{blue}{200.01})}{=} \frac{1}{b} \left[\ln\left(\frac{bv + \sqrt{a^2u^2+b^2v^2}}{au}\right) \right]_0^{1} = \frac{1}{b} \ln\left(\frac{b + \sqrt{a^2u^2+b^2}}{au}\right)
+        \int_{0}^{1}  \frac{1}{\sqrt{a^2 u^2 + b^2 v^2}} \D{v} \overset{(\textcolor{blue}{200.01})\footnotemark[1]}{=} \frac{1}{b} \left[\ln\left(\frac{bv + \sqrt{a^2u^2+b^2v^2}}{au}\right) \right]_0^{1} = \frac{1}{b} \ln\left(\frac{b + \sqrt{a^2u^2+b^2}}{au}\right)
     \end{equation*}
     \begin{equation*}
-        \int_{0}^{1}  \frac{v}{\sqrt{a^2 u^2 + b^2 v^2}} \D{v} \overset{(\textcolor{blue}{201.01})}{=} \left[ \frac{ \sqrt{a^2u^2+b^2v^2}}{b^2} \right]_{0}^{1} = \frac{\sqrt{a^2u^2 + b^2} - au}{b^2}
+        \int_{0}^{1}  \frac{v}{\sqrt{a^2 u^2 + b^2 v^2}} \D{v} \overset{(\textcolor{blue}{201.01})\footnotemark[1]}{=} \left[ \frac{ \sqrt{a^2u^2+b^2v^2}}{b^2} \right]_{0}^{1} = \frac{\sqrt{a^2u^2 + b^2} - au}{b^2}
     \end{equation*}
     \begin{equation*}
-        \mathcal{I}^{(-1)}[\lambda_1\lambda_1'] = a^2 b^2 \int_{0}^{1} F_1(u) \left(\underbrace{\frac{1}{b}\ln\left(\frac{b + \sqrt{a^2u^2+b^2}}{au}\right)}_{F_2(u)} - \underbrace{\frac{\sqrt{a^2u^2 + b^2} - au}{b^2}}_{F_3(u)} \right)\D{u}
+        \mathcal{I}_{\text{I}}^{(-1)}[\lambda_1\lambda_1'] = a^2 b^2 \int_{0}^{1} F_1(u) \left(\underbrace{\frac{1}{b}\ln\left(\frac{b + \sqrt{a^2u^2+b^2}}{au}\right)}_{F_2(u)} - \underbrace{\frac{\sqrt{a^2u^2 + b^2} - au}{b^2}}_{F_3(u)} \right)\D{u}
     \end{equation*}
+
+    \footnotetext[1]{\fullcite{dwight1961tables}}
 \end{frame}
 
 \begin{frame}
@@ -354,7 +392,7 @@
 \begin{frame}
     \begin{align*}
         J_1 &= \int_{0}^{1}\ln(b + \sqrt{a^2 u^2 + b^2}) \D{u} \\
-        &\overset{\text{per partes}}{=} \left[u \ln(b + \sqrt{a^2 u^2 + b^2})\right]_{0}^{1} - \int_0^{1} \frac{a^2 u^2}{a^2u^2 + b^2 + b \sqrt{a^2u^2 + b^2}}\D{u} \\
+        &\overset{\mathclap{\text{pp}\footnotemark[1]}}{=} \left[u \ln(b + \sqrt{a^2 u^2 + b^2})\right]_{0}^{1} - \int_0^{1} \frac{a^2 u^2}{a^2u^2 + b^2 + b \sqrt{a^2u^2 + b^2}}\D{u} \\
         &= \ln(b + \sqrt{a^2 + b^2}) - \int_{0}^{1} \D{u} + b\int_{0}^{1} \frac{1}{\sqrt{a^2u^2 + b^2}} \D{u}
     \end{align*}
     \begin{equation*}
@@ -363,12 +401,14 @@
     \begin{equation*}
         J_1 = \ln(b + \sqrt{a^2 + b^2}) - 1 + \frac{b}{a}\ln\left(\frac{a + \sqrt{a^2+b^2}}{b}\right) 
     \end{equation*}
+
+    \footnotetext[1]{pp = per partes, integration by parts}
 \end{frame}
 
 \begin{frame}
     \begin{align*}
         J_2 &= \int_{0}^{1} u\ln(b + \sqrt{a^2 u^2 + b^2})\D{u} \\
-        &\overset{\text{per partes}}{=} \left[\frac{1}{2}u^2\ln(b + \sqrt{a^2u^2 + b^2})  \right]_{0}^{1} - \frac{1}{2}\int_{0}^{1} \frac{a^2 u^3}{a^2u^2 + b^2 + b \sqrt{a^2u^2 + b^2}}\D{u}
+        &\overset{\mathclap{\text{pp}}}{=}\left[\frac{1}{2}u^2\ln(b + \sqrt{a^2u^2 + b^2})  \right]_{0}^{1} - \frac{1}{2}\int_{0}^{1} \frac{a^2 u^3}{a^2u^2 + b^2 + b \sqrt{a^2u^2 + b^2}}\D{u}
     \end{align*}
     \begin{align*}
         \int_{0}^{1} \frac{a^2 u^3}{a^2u^2 + b^2 + b \sqrt{a^2u^2 + b^2}}\D{u} &= \left[\xi = u^2 \right] = \frac{1}{2}\int_{0}^{1} \frac{a^2 \xi}{a^2\xi + b^2 + b \sqrt{a^2\xi + b^2}} \D{\xi}\\
@@ -430,7 +470,7 @@
 
 \begin{frame}
     \begin{align*}
-        &\int_{0}^{1} F_1(u) F_2(u) \D{u} = \\
+        &\int_{0}^{1} F_1(u) F_2(u) \D{u} \\
         &=\frac{1}{72 a^4b} \Bigg( (18a^2b^2 + 2b^4)- \sqrt{a^2+b^2}(17a^2b + 2b^3) \\
         &\phantom{=\frac{1}{72 a^4b}\Bigg(}+24 a^3b \ln\left(\frac{a + \sqrt{a^2+b^2}}{b}\right) + 9a^4 \ln(\frac{b + \sqrt{a^2 + b^2}}{a}) \Bigg)
     \end{align*}
@@ -458,6 +498,57 @@
 \end{frame}
 
 \begin{frame}
+    \begin{align*}
+        &\int_{0}^{1} F_1(u) \sqrt{a^2u^2+b^2}\D{u} \\
+        &= \frac{1}{90a^4} \Bigg( (15a^2b^3 + 2b^5) + \sqrt{a^2 + b^2}(3a^4 -14a^2b^2 - 2b^4)  + 15a^3 b^2 \ln\left(\frac{a + \sqrt{a^2 + b^2}}{b}\right)\Bigg)
+    \end{align*}
+    \begin{align*}
+        \int_{0}^{1} F_1(u)u \D{u} = \frac{1}{3}\int_{0}^{1} u \D{u} -\frac{1}{2}\int_{0}^{1} u^2 \D{u} + \frac{1}{6}\int_{0}^{1} u^4 \D{u} = \left[ \frac{u^2}{6} - \frac{u^3}{6} + \frac{u^5}{30} \right]_{0}^{1} = \frac{1}{30}
+    \end{align*}
+    \begin{align*}
+        &\int_{0}^{1} F_1(u) F_3(u)\D{u} \\
+        &= \frac{1}{90a^4b^2}\Bigg( (-3a^5 + 15a^2 b^3 + 2 b^5) + \sqrt{a^2 + b^2}(3a^4 -14a^2b^2 - 2b^4) \\
+        &\phantom{\frac{1}{90a^4b^2}\Bigg(}+ 15a^3 b^2 \ln\left(\frac{a + \sqrt{a^2 + b^2}}{b}\right) \Bigg)
+    \end{align*}
+\end{frame}
+
+\begin{frame}
+    \begin{align*}
+        \mathcal{I}_{\text{I}}^{(-1)}[\lambda_1\lambda_1'] &= a^2b^2 \int_{0}^{1}F_1(u)F_2(u) \D{u} - a^2b^2 \int_{0}^{1}F_1(u)F_3(u)\D{u} \\
+        &= \frac{1}{360 a^4 b^2} \Bigg( (12a^5 + 30a^2b^3 + 2b^5) - \sqrt{a^2 + b^2} (12a^4 + 29 a^2 b^2 + 2 b^4) \\
+        &\phantom{\frac{1}{360 a^4 b^2} \Bigg(}+45 a^4 b \ln\left(\frac{b + \sqrt{a^2 + b^2}}{a}\right) + 60 a^3 b^2 \ln\left(\frac{a + \sqrt{a^2 + b^2}}{b}\right) \Bigg)
+    \end{align*}
+    \begin{itemize}
+        \item The remaining integrals --- $\mathcal{I}_{\text{II}}^{(-1)}[\lambda_1\lambda_1']$, $\mathcal{I}_{\text{III}}^{(-1)}[\lambda_1\lambda_1']$, $\mathcal{I}_{\text{IV}}^{(-1)}[\lambda_1\lambda_1']$ --- are evaluated in an analogous manner.
+        \item A \Mathematica\ script was developed to automate the evaluation of these singular integrals.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Singularity extraction strength}
+    \begin{itemize}
+        \item What is the benefit of a stronger extraction?
+        \item The cornerstone is the Taylor series of the scalar Green’s function,
+        \begin{equation*}
+            g(\V{r}, \V{r}') = \frac{1}{4\uppi}\sum_{q=-1}^{\infty} \frac{(-\I\KZ)^{q+1}}{(q+1)!}\|\V{r} - \V{r}'\|^{q},
+        \end{equation*}
+        \item All odd-power terms in this expansion are non-smooth at $\V{r} = \V{r}'$.
+        \item We considered the first two odd terms of the expansion.
+        \begin{equation*}
+            g(\V{r}, \V{r}') = g_{\text{s}}(\V{r}, \V{r}') + \frac{1}{4\uppi}R^{-1} - \frac{\KZ^2}{8\uppi}R,
+        \end{equation*}
+        where
+        \begin{equation*}
+            g_{\text{s}}(\V{r}, \V{r}') = \frac{1}{4\uppi} \left(\frac{\mathrm{e}^{-\I\KZ R}}{R} -\frac{1}{R} + \frac{\KZ^2 R}{2}\right).
+        \end{equation*}
+        \item Integral containing $g_s$ can be evaluated numerically $\lim_{R \to 0} g_{\text{s}}(R) = -\I\KZ/(4\uppi)$ when $\V{r} = \V{r}'$.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Singularity extraction strength comparison}
+    \begin{figure}[ht]
+        \centering
+        \input{graphs/singularity_extraction_strength_comparison.tex}
+    \end{figure}
 \end{frame}
 
 \end{document}
