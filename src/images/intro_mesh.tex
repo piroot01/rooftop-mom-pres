@@ -1,0 +1,92 @@
+\documentclass[tikz]{standalone}
+\usepackage{../include/template}
+\usepackage{tikz}
+\usepackage{tikz-3dplot}
+\usetikzlibrary{calc}
+\usepackage{pgfplots}
+
+% colorbrewer Paired-12
+\definecolor{PairedA}{RGB}{166, 206, 227}
+\definecolor{PairedB}{RGB}{ 31, 120, 180}
+\definecolor{PairedC}{RGB}{178, 223, 138} 
+\definecolor{PairedD}{RGB}{ 41, 128,  35}   % made darker by 20%
+\definecolor{PairedE}{RGB}{251, 154, 153}
+\definecolor{PairedF}{RGB}{182,  21,  22}   % made darker by 20%
+\definecolor{PairedG}{RGB}{253, 191, 111}
+\definecolor{PairedH}{RGB}{255, 127,   0}
+\definecolor{PairedI}{RGB}{202, 178, 214}
+\definecolor{PairedJ}{RGB}{106,  61, 154}
+\definecolor{PairedK}{RGB}{255, 255, 153}
+\definecolor{PairedL}{RGB}{177,  89,  40}
+
+\RequirePackage{mathtools}
+\RequirePackage{booktabs}
+\RequirePackage{tabu}
+\RequirePackage{makecell}
+\RequirePackage{multirow}
+\RequirePackage{enumerate}
+\RequirePackage{placeins}
+\RequirePackage{mathdesign}
+\RequirePackage{float}
+\RequirePackage{csquotes}
+\RequirePackage{physics}
+\RequirePackage{fontspec}
+
+
+\newcommand{\rotateRPY}[3]% roll, pitch, yaw
+{   \pgfmathsetmacro{\rollangle}{#1}
+    \pgfmathsetmacro{\pitchangle}{#2}
+    \pgfmathsetmacro{\yawangle}{#3}
+
+    % to what vector is the x unit vector transformed, and which 2D vector is this?
+    \pgfmathsetmacro{\newxx}{cos(\yawangle)*cos(\pitchangle)}
+    \pgfmathsetmacro{\newxy}{sin(\yawangle)*cos(\pitchangle)}
+    \pgfmathsetmacro{\newxz}{-sin(\pitchangle)}
+    \path (\newxx,\newxy,\newxz);
+    \pgfgetlastxy{\nxx}{\nxy};
+
+    % to what vector is the y unit vector transformed, and which 2D vector is this?
+    \pgfmathsetmacro{\newyx}{cos(\yawangle)*sin(\pitchangle)*sin(\rollangle)-sin(\yawangle)*cos(\rollangle)}
+    \pgfmathsetmacro{\newyy}{sin(\yawangle)*sin(\pitchangle)*sin(\rollangle)+ cos(\yawangle)*cos(\rollangle)}
+    \pgfmathsetmacro{\newyz}{cos(\pitchangle)*sin(\rollangle)}
+    \path (\newyx,\newyy,\newyz);
+    \pgfgetlastxy{\nyx}{\nyy};
+
+    % to what vector is the z unit vector transformed, and which 2D vector is this?
+    \pgfmathsetmacro{\newzx}{cos(\yawangle)*sin(\pitchangle)*cos(\rollangle)+ sin(\yawangle)*sin(\rollangle)}
+    \pgfmathsetmacro{\newzy}{sin(\yawangle)*sin(\pitchangle)*cos(\rollangle)-cos(\yawangle)*sin(\rollangle)}
+    \pgfmathsetmacro{\newzz}{cos(\pitchangle)*cos(\rollangle)}
+    \path (\newzx,\newzy,\newzz);
+    \pgfgetlastxy{\nzx}{\nzy};
+}
+
+\tikzset{RPY/.style={x={(\nxx,\nxy)},y={(\nyx,\nyy)},z={(\nzx,\nzy)}}}
+
+\begin{document}
+    \tdplotsetmaincoords{45}{20}
+    \begin{tikzpicture}[tdplot_main_coords,line cap=round, line join=round]
+        \def\dx{0.1}
+        \def\dy{0.1}
+
+        \newcommand{\drawcross}[4]{%
+            % draw with color (#1), shift in z by #2
+            \begin{scope}[shift={(#1,#2,#3)}]
+                \draw[thick,->] (0,0,0) -- (1.5,0,0) node[anchor=east]{$\UV{x}$};
+                \draw[thick,->] (0,0,0) -- (0,1.5,0) node[anchor=north]{$\UV{y}$};
+                \draw[thick,->] (0,0,0) -- (0,0,1.5) node[anchor=south]{$\UV{z}$};
+            \end{scope}
+        }
+
+        \rotateRPY{0}{0}{180}
+        \begin{scope}[shift={(0, 0, 0)}, RPY]
+            \drawcross{-0.7}{-0.7}{0}{1}
+
+            \foreach \x in {0,\dx,...,5} {
+                \foreach \y in {0,\dy,...,10} {
+                    \draw[fill = PairedK] (\x,\y, 0) -- (\x+\dx,\y, 0) -- (\x+\dx, \y+\dy, 0) -- (\x, \y+\dy, 0) -- cycle;
+                    \draw[] (\x,\y, 0) -- (\x+\dx,\y, 0) -- (\x+\dx, \y+\dy, 0) -- (\x, \y+\dy, 0) -- cycle;
+                }
+            }
+        \end{scope}
+    \end{tikzpicture}
+\end{document}
