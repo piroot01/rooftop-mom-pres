@@ -5,7 +5,8 @@
 
 % Utility packages
 \newcommand\SLASH{\char`\\} % Used for command examples
-\usepackage{array} % Array and tabular enhancements
+\usepackage{array} % Array and tabular enhancemenits
+\usepackage{comment}
 \newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}} % Centered column type
 
 \bibliography{bib/core}
@@ -49,12 +50,171 @@
     \begin{itemize}
         \item Consider antenna topology $\Omega$ made from a perfect conductor.
         \item We want to know the current $\V{J}$ under exciting field $\V{E}_{\mathrm{inc}}$.
+        \item The field interaction is endoded in the Maxwell's equations.
     \end{itemize}
     \vspace{1cm}
     \begin{figure}
         \centering
         \includegraphics[width=0.5\textwidth]{images/problem_descr.pdf}
     \end{figure}
+\end{frame}
+
+\begin{frame}{The essence of the work}
+    \begin{itemize}
+        \item Fast and scalable way of solving the Maxwell's equations on planar radiators.
+        \item Symmetries approach for accelerating computation.
+    \end{itemize}
+    \vspace{1cm}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.8\textwidth]{images/symetries_1.pdf}
+    \end{figure}
+\end{frame}
+
+\section{Solution via MoM}
+\begin{frame}{Solution via Method-of-Moments paradigm}
+    \begin{itemize}
+        \item Expand the unknown current $\V{J}$ into a chosen basis.
+        \begin{equation*}
+            \V{J}(\V{r}') \approx \sum_{j = 1}^{N} [\V{I}_j] \PSIJ(\V{r'})
+        \end{equation*}
+        \item Then the interaction of the $\V{J}$ and $\V{E}_{\text{inc}}$ is formulated via a matrix equation.
+        \begin{equation*}
+            \M{Z}\V{I} = \V{V},
+        \end{equation*}
+    \end{itemize}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.4\textwidth]{images/basis_function.pdf}
+    \end{figure}
+\end{frame}
+
+\begin{comment}
+        where
+        \begin{align}
+            [\Zmat_{ij}] &= \I\KZ\ZVAC \int_{\Omega_i} \int_{\Omega_j} \PSII(\V{r}) \vdot \PSIJ(\V{r}') g(\V{r},\V{r}') \D{\V{r}'}\D{\V{r}} \\
+            &\phantom{=}- \frac{\I\ZVAC}{\KZ}\int_{\Omega_i}\int_{\Omega_j}(\div{\PSII}(\V{r}))(\div{\PSIJ}(\V{r}')) g(\V{r}, \V{r}') \D{\V{r}'}\D{\V{r}},
+        \end{align}
+        and
+        \begin{equation}
+            [\V{V}_i] = \int_{\Omega_i} \PSIJ(\V{r}') \vdot \V{E}_{\text{inc}}(\V{r}') \D{\V{r}'}
+        \end{equation}
+\end{comment}
+
+\begin{comment}
+\section{Basis function selection}
+\begin{frame}{General rooftop basis function}
+    \begin{itemize}
+        \item The general form of the rooftop basis functions (\textquote{rooftops}) can be expressed as
+        \begin{equation}
+            \PSII(\V{r}) =
+            \begin{cases}
+                \PSII^{+}(\V{r}) = \dfrac{l_i}{A_i^{+}}  \left((\V{r} - \V{v}_{i1}^{+})\vdot \UV{e}_i^{+}\right) \UV{e}_i^{+}, \quad & \forall \V{r} \in \Omega_i^{+}, \\[1em]
+                \PSII^{-}(\V{r}) = -\dfrac{l_i}{A_i^{-}} \left( (\V{r} - \V{v}_{i2}^{-})\vdot \UV{e}_i^{-}\right) \UV{e}_i^{-}, \quad & \forall \V{r} \in \Omega_i^{-}, \\[1em]
+                0, \quad & \text{elsewhere}, \\
+            \end{cases}
+        \end{equation}
+        \begin{figure}
+            \centering
+            \includegraphics[width=0.4\textwidth]{images/basis_function.pdf}
+        \end{figure}
+    \end{itemize}
+\end{frame}
+\end{comment}
+
+\begin{frame}{Rooftops restrictions}
+    \begin{itemize}
+        \item We impose a set of rules that will enable us to develop faster algorithms
+        \begin{enumerate}[(i)]
+            \item $\UV{e}_i^{+/-} \in \{\UV{x},\UV{y}\in\R^3:\,\UV{x},\UV{y}\}$
+            \item $l_i = l_x = a$ iff $\UV{e}_i^{+/-} = \UV{x}$
+            \item $l_i = l_y = b$ iff $\UV{e}_i^{+/-} = \UV{y}$
+        \end{enumerate}
+    \end{itemize}
+    \vspace{0.2cm}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.6\textwidth]{images/mesh.pdf}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Multiple patches}
+    \begin{itemize}
+        \item When multiple patches (array antennas) are considered we just associate with each a set of local coordinates.
+    \end{itemize}
+    \vspace{1cm}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.8\textwidth]{images/meshes.pdf}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Reflectional and rotational symmetries}
+    \begin{itemize}
+        \item Construct a irreducible parts of the impedance matrix $\Zmat$.
+        \item Reduce the computational effort from $\mathcal{O}(N^2)$ to $\mathcal{O}(N)$
+    \end{itemize}
+    \begin{columns}
+        \begin{column}[t]{0.49\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[width=0.8\textwidth]{images/samedir_sym.pdf}
+            \end{figure}
+        \end{column}
+        \begin{column}[t]{0.49\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[width=0.8\textwidth]{images/crossdir_sym.pdf}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Comparison with the naive implementation}
+    \begin{figure}[ht]
+        \centering
+        \input{graphs/classical_vs_interaction_symmetries_accelerated_impedance_matrix.tex}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Convolutional approach}
+    \begin{itemize}
+        \item Reindexing the rooftops leads to a tensor formalism.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Convolutional approach}
+    \begin{itemize}
+        \item Reindexing the rooftops
+        \begin{align}
+            \V{\Psi}_{m} \longrightarrow \V{\Psi}_{\V{m}},\, \V{m} = m_x\vu*{x} + m_y\vu*{y}
+        \end{align}
+        then from impedance matrix is \textquote{impedance tensor} $\T{Z}$.
+        \item This formulation allows us to rewrite the MoM into an equivalent set of equations which uses 2D circulant convolution.
+        \item The kernels of the convolutions are denoted \textquote{Green's operator} $\mathcal{G}$ and envelopes complete information of the radiator in an irreducible form.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Pros and cons of convolutional approach}
+    \begin{itemize}
+        \item Because of the irreducible form of the $\mathcal{G}$, the storage and computational time to construct the MoM equations is $\mathcal{O}(N)$
+        \item The goal of this approach is to primarily solve the solving time of the matrix inversion of $\mathcal{O}(N^3)$, which due to the FFT implementation goes down to $\mathcal{O}(N \log(N))$.
+        \item The deficiancy of this method is current disability to solve arbitrarilu shaped radiators, the only ones are defined by the index ranges $m_x$, $m_y$.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Comparison with the \textsc{Matlab}'s build-in solver}
+    \begin{figure}[ht]
+        \centering
+        \input{graphs/matlab_vs_iterative_solvers.tex}
+    \end{figure}
+\end{frame}
+
+\section*{Questions}
+\begin{frame}
+    \centering
+    \vspace{2cm}
+    {\Huge Questions?}
 \end{frame}
 
 \begin{frame}{Equation formulation}
@@ -90,120 +250,8 @@
     \footnotetext[2]{\fullcite{Gibson_MoMinElectromagnetics}}
 \end{frame}
 
-\begin{frame}{Operators for further radiator description}
-    \begin{columns}
-        \begin{column}[t]{0.49\textwidth}
-            \begin{block}{Far field\footnotemark[1]}
-                \begin{equation*}
-                    F(\vu*{r}, \vu*{e}) = \frac{-\I \ZVAC \KZ}{4 \uppi}\int_{\Omega} \vu*{e}\vdot \V{J}(\V{r}') \mathrm{e}^{\I k \vu*{r}\vdot \V{r}'} \D{\V{r}'}
-                \end{equation*}
-            \end{block}
-        \end{column}
-        \begin{column}[t]{0.49\textwidth}
-            \begin{block}{Radiation intensity\footnotemark[1]}
-                \begin{equation*}
-                    U(\vu*{r}, \vu*{e}) = \frac{1}{2\ZVAC} |F(\vu*{r}, \vu*{e})|^2
-                \end{equation*}
-            \end{block}
-        \end{column}
-    \end{columns}
-    \begin{columns}
-        \centering
-        \begin{column}[t]{0.5\textwidth}
-            \begin{block}{Directivity\footnotemark[1]}
-                \begin{equation*}
-                    D(\vu*{r}, \vu*{e}) = \frac{4\uppi U(\vu*{r}, \vu*{r})}{P_{\text{rad}}}
-                \end{equation*}
-            \end{block}
-        \end{column}
-    \end{columns}
 
-    \footnotetext[1]{\fullcite{Masek_etal_EuCAP2018_CMgroupTracking}}
-\end{frame}
-
-\begin{frame}{Optimalization of the radiator topology}
-    \begin{itemize}
-        \item How to make the radiator shape such that it is optimal for given conditions.
-    \end{itemize}
-
-    [[here i would like to place an image of an ideal radiator from a paper density based topology optimalization - Jonas Tucek, Miloslav Capek]]
-\end{frame}
-
-\section{Solution via MoM}
-\begin{frame}{Solution via Method-of-Moments paradigm}
-    \begin{itemize}
-        \item Upon suitable basisis we can discretize the continuous formulation via EFIE into
-        \begin{equation}
-            \M{Z}\V{I} = \V{V},
-        \end{equation}
-        where
-        \begin{align}
-            [\Zmat_{ij}] &= \I\KZ\ZVAC \int_{\Omega_i} \int_{\Omega_j} \PSII(\V{r}) \vdot \PSIJ(\V{r}') g(\V{r},\V{r}') \D{\V{r}'}\D{\V{r}} \\
-            &\phantom{=}- \frac{\I\ZVAC}{\KZ}\int_{\Omega_i}\int_{\Omega_j}(\div{\PSII}(\V{r}))(\div{\PSIJ}(\V{r}')) g(\V{r}, \V{r}') \D{\V{r}'}\D{\V{r}},
-        \end{align}
-        and
-        \begin{equation}
-            [\V{V}_i] = \int_{\Omega_i} \PSIJ(\V{r}') \vdot \V{E}_{\text{inc}}(\V{r}') \D{\V{r}'}
-        \end{equation}
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Solution via Method-of-Moments paradigm}
-    \begin{itemize}
-        \item Then the current density $\V{J}$ can be approximated from the vector of unkwnows as
-        \begin{equation}
-            \V{J}(\V{r}') \approx \sum_{j = 1}^{N} [\V{I}_j] \PSIJ(\V{r'})
-        \end{equation}
-    \end{itemize}
-\end{frame}
-
-\section{Basis function selection}
-\begin{frame}{General rooftop basis function}
-    \begin{itemize}
-        \item The general form of the rooftop basis functions (\textquote{rooftops}) can be expressed as
-        \begin{equation}
-            \PSII(\V{r}) =
-            \begin{cases}
-                \PSII^{+}(\V{r}) = \dfrac{l_i}{A_i^{+}}  \left((\V{r} - \V{v}_{i1}^{+})\vdot \UV{e}_i^{+}\right) \UV{e}_i^{+}, \quad & \forall \V{r} \in \Omega_i^{+}, \\[1em]
-                \PSII^{-}(\V{r}) = -\dfrac{l_i}{A_i^{-}} \left( (\V{r} - \V{v}_{i2}^{-})\vdot \UV{e}_i^{-}\right) \UV{e}_i^{-}, \quad & \forall \V{r} \in \Omega_i^{-}, \\[1em]
-                0, \quad & \text{elsewhere}, \\
-            \end{cases}
-        \end{equation}
-        \begin{figure}
-            \centering
-            \includegraphics[width=0.4\textwidth]{images/basis_function.pdf}
-        \end{figure}
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Rooftops restrictions}
-    \begin{itemize}
-        \item We impose a set of rules that will enable us to develop faster algorithms
-        \begin{enumerate}[(i)]
-            \item $\UV{e}_i^{+/-} \in \{\UV{x},\UV{y}\in\R^3:\,\UV{x},\UV{y}\}$
-            \item $l_i = l_x = a$ iff $\UV{e}_i^{+/-} = \UV{x}$
-            \item $l_i = l_y = b$ iff $\UV{e}_i^{+/-} = \UV{y}$
-        \end{enumerate}
-    \end{itemize}
-    \vspace{0.2cm}
-    \begin{figure}
-        \centering
-        \includegraphics[width=0.6\textwidth]{images/mesh.pdf}
-    \end{figure}
-\end{frame}
-
-\begin{frame}{Multiple patches}
-    \begin{itemize}
-        \item When multiple patches (array antennas) are considered we just associate with each a set of local coordinates.
-    \end{itemize}
-    \vspace{1cm}
-    \begin{figure}
-        \centering
-        \includegraphics[width=0.8\textwidth]{images/meshes.pdf}
-    \end{figure}
-\end{frame}
-
-\section{Rooftop basis choice consequences}
+\section*{Singularity extraction}
 \begin{frame}{Singular terms}
     \begin{itemize}
         \item The singular nature of the green's function.
@@ -226,108 +274,6 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{Singularity extraction}
-    \begin{itemize}
-        \item The singular scalar Green's function can be rewitten into
-        \begin{equation}
-            \label{eq:sigex}
-            g(\V{r}, \V{r}') = g_{\text{s}}(\V{r}, \V{r}') + \frac{1}{4\uppi}R^{-1} - \frac{\KZ^2}{8\uppi}R,
-        \end{equation}
-        where $g_s(\V{r}, \V{r}')$, termed the smooth Green's function, is given by
-        \begin{equation}
-            g_{\text{s}}(\V{r}, \V{r}') = \frac{1}{4\uppi} \left(\frac{\mathrm{e}^{-\I\KZ R}}{R} -\frac{1}{R} + \frac{\KZ^2 R}{2}\right).
-        \end{equation}
-        \item The first term of~\eqref{eq:sigex} has a finite limit the second and third are kernels of the singular integrals.
-        \item Using the transformation into the series of four line integrals we are able to obtain analytical result.
-    \end{itemize}
-\end{frame}
-
-\subsection{Acceleration techniques}
-\begin{frame}{Interaction symmetries approach}
-    \begin{itemize}
-        \item The main goal of this approach is to accelerate the impedance matrix assembly time.
-        \item Each term of the impedance matrix is associated with a geomerical position of two rooftops.
-        \item Identifying only those rooftops which results in a unique impedance matrix element leads to drastical reduction in construction of the impedance matrix.
-        \item The translational symmetries are obvious and lead to linear time construction.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Reflectional and rotational symmetries}
-    \begin{itemize}
-        \item But we can do beter.
-    \end{itemize}
-    \begin{columns}
-        \begin{column}[t]{0.49\textwidth}
-            \begin{figure}
-                \centering
-                \includegraphics[width=0.8\textwidth]{images/samedir_sym.pdf}
-            \end{figure}
-        \end{column}
-        \begin{column}[t]{0.49\textwidth}
-            \begin{figure}
-                \centering
-                \includegraphics[width=0.8\textwidth]{images/crossdir_sym.pdf}
-            \end{figure}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Comparison with the naive implementation}
-    \begin{figure}[ht]
-        \centering
-        \input{graphs/classical_vs_interaction_symmetries_accelerated_impedance_matrix.tex}
-    \end{figure}
-\end{frame}
-
-\begin{frame}{Convolutional approach}
-    \begin{itemize}
-        \item Reindexing the rooftops
-        \begin{align}
-            \V{\Psi}_{m} \longrightarrow \V{\Psi}_{\V{m}},\, \V{m} = m_x\vu*{x} + m_y\vu*{y}
-        \end{align}
-        then from impedance matrix is \textquote{impedance tensor} $\T{Z}$.
-        \item This formulation allows us to rewrite the MoM into an equivalent set of equations which uses 2D circulant convolution.
-        \item The kernels of the convolutions are denoted \textquote{Green's operator} $\mathcal{G}$ and envelopes complete information of the radiator in an irreducible form.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Pros and cons of convolutional approach}
-    \begin{itemize}
-        \item Because of the irreducible form of the $\mathcal{G}$, the storage and computational time to construct the MoM equations is $\mathcal{O}(N)$
-        \item The goal of this approach is to primarily solve the solving time of the matrix inversion of $\mathcal{O}(N^3)$, which due to the FFT implementation goes down to $\mathcal{O}(N \log(N))$.
-        \item The deficiancy of this method is current disability to solve arbitrarilu shaped radiators, the only ones are defined by the index ranges $m_x$, $m_y$.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Comparison of the memory demands of the $\Zmat$ and $\mathcal{G}$}
-    \begin{figure}[ht]
-        \centering
-        \input{graphs/memory_size_of_greens_operator_vs_impedance_matrix.tex}
-    \end{figure}
-\end{frame}
-
-\begin{frame}{Comparison with the \textsc{Matlab}'s build-in solver}
-    \begin{figure}[ht]
-        \centering
-        \input{graphs/matlab_vs_iterative_solvers.tex}
-    \end{figure}
-\end{frame}
-
-\begin{frame}{The spectral preconditioner}
-    \begin{figure}[ht]
-        \centering
-        \input{graphs/cg_vs_pcg.tex}
-    \end{figure}
-\end{frame}
-
-\section*{Questions}
-\begin{frame}
-    \centering
-    \vspace{2cm}
-    {\Huge Questions?}
-\end{frame}
-
-\section*{Singularity extraction}
 \begin{frame}{Computation of the singular integrals}
     \begin{itemize}
         \item For demonstration purposes, we consider the following extracted integral
@@ -558,6 +504,20 @@
     \begin{figure}[ht]
         \centering
         \input{graphs/singularity_extraction_strength_comparison.tex}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Comparison of the memory demands of the $\Zmat$ and $\mathcal{G}$}
+    \begin{figure}[ht]
+        \centering
+        \input{graphs/memory_size_of_greens_operator_vs_impedance_matrix.tex}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{The spectral preconditioner}
+    \begin{figure}[ht]
+        \centering
+        \input{graphs/cg_vs_pcg.tex}
     \end{figure}
 \end{frame}
 
