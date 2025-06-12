@@ -9,6 +9,14 @@
 \usepackage{comment}
 \newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}} % Centered column type
 
+\usepackage{amsmath,amssymb}
+
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+
 \bibliography{bib/core}
 \bibliography{bib/extra}
 
@@ -39,7 +47,8 @@
         \begin{column}[t]{0.55\textwidth}
             \begin{figure}
                 \centering
-                \includegraphics[width = 0.8\textwidth]{images/intro_mesh.pdf}
+                \includegraphics[width = 0.75\textwidth]{images/intro_mesh.pdf}
+                \caption*{Showcase of a solvable discretized radiator of size 500 x 1000 patched used for problems up to $ka = 50$.}
             \end{figure}
         \end{column}
     \end{columns}
@@ -48,9 +57,9 @@
 \section{The problem description}
 \begin{frame}{The problem description}
     \begin{itemize}
-        \item Consider antenna topology $\Omega$ made from a perfect conductor.
-        \item We want to know the current $\V{J}$ under exciting field $\V{E}_{\mathrm{inc}}$.
-        \item The field interaction is endoded in the Maxwell's equations.
+        \item Consider antenna topology $\Omega$, composed of a perfect conductor.
+        \item We want to determine the current $\V{J}$ induced by the incident field $\V{E}_{\mathrm{inc}}$.
+        \item The field interaction is encoded by Maxwell's equations.
     \end{itemize}
     \vspace{1cm}
     \begin{figure}
@@ -59,26 +68,14 @@
     \end{figure}
 \end{frame}
 
-\begin{frame}{The essence of the work}
-    \begin{itemize}
-        \item Fast and scalable way of solving the Maxwell's equations on planar radiators.
-        \item Symmetries approach for accelerating computation.
-    \end{itemize}
-    \vspace{1cm}
-    \begin{figure}
-        \centering
-        \includegraphics[width=0.8\textwidth]{images/symetries_1.pdf}
-    \end{figure}
-\end{frame}
-
 \section{Solution via MoM}
 \begin{frame}{Solution via Method-of-Moments paradigm}
     \begin{itemize}
-        \item Expand the unknown current $\V{J}$ into a chosen basis.
+        \item Expand the unknown current $\V{J}$ in a selected basis.
         \begin{equation*}
             \V{J}(\V{r}') \approx \sum_{j = 1}^{N} [\V{I}_j] \PSIJ(\V{r'})
         \end{equation*}
-        \item Then the interaction of the $\V{J}$ and $\V{E}_{\text{inc}}$ is formulated via a matrix equation.
+        \item Then the interaction between $\V{J}$ and $\V{E}_{\text{inc}}$ is formulated as a matrix equation.
         \begin{equation*}
             \M{Z}\V{I} = \V{V},
         \end{equation*}
@@ -124,7 +121,7 @@
 
 \begin{frame}{Rooftops restrictions}
     \begin{itemize}
-        \item We impose a set of rules that will enable us to develop faster algorithms
+        \item We impose a set of rules to enable faster algorithm development.
         \begin{enumerate}[(i)]
             \item $\UV{e}_i^{+/-} \in \{\UV{x},\UV{y}\in\R^3:\,\UV{x},\UV{y}\}$
             \item $l_i = l_x = a$ iff $\UV{e}_i^{+/-} = \UV{x}$
@@ -140,7 +137,7 @@
 
 \begin{frame}{Multiple patches}
     \begin{itemize}
-        \item When multiple patches (array antennas) are considered we just associate with each a set of local coordinates.
+        \item For multiple patches (array antennas), we assign each patch its own local coordinate system.
     \end{itemize}
     \vspace{1cm}
     \begin{figure}
@@ -149,9 +146,10 @@
     \end{figure}
 \end{frame}
 
-\begin{frame}{Reflectional and rotational symmetries}
+\section{Acceleration techniques}
+\begin{frame}{Symmetries of the rooftop interactions}
     \begin{itemize}
-        \item Construct a irreducible parts of the impedance matrix $\Zmat$.
+        \item Construct the irreducible parts of the impedance matrix $\Zmat$.
         \item Reduce the computational effort from $\mathcal{O}(N^2)$ to $\mathcal{O}(N)$
     \end{itemize}
     \begin{columns}
@@ -170,7 +168,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{Comparison with the naive implementation}
+\begin{frame}{Comparison with the naive implementation - $\M{Z}$ construction}
     \begin{figure}[ht]
         \centering
         \input{graphs/classical_vs_interaction_symmetries_accelerated_impedance_matrix.tex}
@@ -179,34 +177,58 @@
 
 \begin{frame}{Convolutional approach}
     \begin{itemize}
-        \item Reindexing the rooftops leads to a tensor formalism.
+        \item Exploit symmetries for $\Zmat\V{I}=\V{V}$ solving.
+        \item Switch from matrix to tensor form.
+        \item Model interaction via Green’s convolution.
+        \item Achieve $\mathcal{O}(N\log N)$ time, $\mathcal{O}(N)$ memory.
     \end{itemize}
+    \vspace{1cm}
+    \[
+        \begin{tikzcd}[ampersand replacement=\&]
+            \C^{(2M - 1)\times(2N - 1)} \arrow[r, "\mathcal{G}_{\xdir\xdir}\text{,}\mathcal{G}_{\ydir\xdir}"] \& \C^{(2M - 1)\times(2N - 1)} \arrow[d, "\mathcal{T}"]\\
+            \arrow[d, swap, "\mathrm{vec}_{K_{\xdir}}"] \arrow[u, "\mathcal{E}"] \C^{M \times N} \& \arrow[d, "\mathrm{vec}_{K_{\xdir}}"] \C^{M \times N} \\
+            \C^{N_\xdir} \arrow[r, "\M{Z}_{\xdir\xdir}\text{,}\M{Z}_{\ydir\xdir}"] \& \C^{N_\xdir}
+        \end{tikzcd}
+        \quad
+        \begin{tikzcd}[ampersand replacement=\&]
+            \C^{(2M - 1)\times(2N - 1)} \arrow[r, "\mathcal{G}_{\xdir\ydir}\text{,}\mathcal{G}_{\ydir\ydir}"] \& \C^{(2M - 1)\times(2N - 1)} \arrow[d, "\mathcal{T}"]\\
+            \arrow[d, swap, "\mathrm{vec}_{K_{\ydir}}"] \arrow[u, "\mathcal{E}"] \C^{M \times N} \& \arrow[d, "\mathrm{vec}_{K_{\ydir}}"] \C^{M \times N} \\
+            \C^{N_\ydir} \arrow[r, "\M{Z}_{\xdir\ydir}\text{,}\M{Z}_{\ydir\ydir}"] \& \C^{N_\ydir}
+        \end{tikzcd}
+    \]
 \end{frame}
 
-\begin{frame}{Convolutional approach}
-    \begin{itemize}
-        \item Reindexing the rooftops
-        \begin{align}
-            \V{\Psi}_{m} \longrightarrow \V{\Psi}_{\V{m}},\, \V{m} = m_x\vu*{x} + m_y\vu*{y}
-        \end{align}
-        then from impedance matrix is \textquote{impedance tensor} $\T{Z}$.
-        \item This formulation allows us to rewrite the MoM into an equivalent set of equations which uses 2D circulant convolution.
-        \item The kernels of the convolutions are denoted \textquote{Green's operator} $\mathcal{G}$ and envelopes complete information of the radiator in an irreducible form.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Pros and cons of convolutional approach}
-    \begin{itemize}
-        \item Because of the irreducible form of the $\mathcal{G}$, the storage and computational time to construct the MoM equations is $\mathcal{O}(N)$
-        \item The goal of this approach is to primarily solve the solving time of the matrix inversion of $\mathcal{O}(N^3)$, which due to the FFT implementation goes down to $\mathcal{O}(N \log(N))$.
-        \item The deficiancy of this method is current disability to solve arbitrarilu shaped radiators, the only ones are defined by the index ranges $m_x$, $m_y$.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Comparison with the \textsc{Matlab}'s build-in solver}
+\begin{frame}{Accuracy comparison for RCS}
     \begin{figure}[ht]
         \centering
-        \input{graphs/matlab_vs_iterative_solvers.tex}
+        \input{graphs/RCS_comparison.tex}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{RCS for large $ka$ - result}
+    \begin{figure}[ht]
+        \centering
+        \input{graphs/RCS_large.tex}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{RCS for large $ka$ - time}
+    \begin{figure}[ht]
+        \centering
+        \input{graphs/RCS_compTime.tex}
+    \end{figure}
+\end{frame}
+
+\section*{Conclusion}
+\begin{frame}{Conclusion}
+    \begin{itemize}
+        \item Validated symmetry-based solution.
+        \item No direct arbitrary-geometry solver without $\M{Z}$.
+        \item Explore convolutional approach for rank-1 perturbations.
+    \end{itemize}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.25\textwidth]{images/spiral_antenna.pdf}
     \end{figure}
 \end{frame}
 
@@ -227,7 +249,7 @@
     where $g$ is the 3D scalar Green's function\footnotemark[2].
     \begin{columns}
         \begin{column}[t]{0.49\textwidth}
-            \centeringO
+            \centering
             \begin{minipage}{0.7\textwidth}
                 \begin{block}{Scalar Green's function\footnotemark[2]}
                     \begin{equation*}
@@ -514,11 +536,21 @@
     \end{figure}
 \end{frame}
 
+\begin{frame}{Accuracy comparison in RCS parameter}
+    \begin{figure}[ht]
+        \centering
+        \input{graphs/matlab_vs_iterative_solvers.tex}
+    \end{figure}
+\end{frame}
+
 \begin{frame}{The spectral preconditioner}
     \begin{figure}[ht]
         \centering
         \input{graphs/cg_vs_pcg.tex}
     \end{figure}
+\end{frame}
+
+\begin{frame}{Rank-1 perturbations of the convolutional kernel}
 \end{frame}
 
 \end{document}
