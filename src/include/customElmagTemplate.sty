@@ -14,12 +14,20 @@
 \RequirePackage{subfig} % for subfigures
 \RequirePackage{xcolor} % for defines colors
 
+\usepackage{pgfplots}
+\usepgfplotslibrary{fillbetween}
+\usetikzlibrary{positioning, shapes, arrows.meta}
+\usetikzlibrary{calc}
+
 \usepackage{csquotes}
 \RequirePackage{tabu}
 \RequirePackage{physics, amsmath, amssymb, amsfonts, mathtools}
 \usepackage[Symbol]{upgreek}
 
 \usepackage{textcomp}
+
+\pgfdeclarelayer{bg}
+\pgfsetlayers{bg,main}
 
 % command for affiliation - fist arg: tex (superscript is used), second arg: bookrefs (brackets are used)
 % \newcommand{\affiliation}[1]{\texorpdfstring{\textsuperscript{#1}}{(#1)}}

@@ -2,11 +2,14 @@
 \begin{axis}[
     % temporary
     width=0.9\textwidth,
-    height=0.45\textwidth,
+    height=0.4\textwidth,
     ylabel={$t$ [s]},
-    xlabel={$N$},
+    xlabel={number of basis functions $N$ [--]},
     legend pos=north west,
+    legend style={font=\small, xshift=-2mm},
     grid=major,
+    xminorgrids,
+    grid style={dashed},
     xmode=log,
     ymode=log,
     smooth,
@@ -15,7 +18,6 @@
 ]
     % non-accelerated
     \addplot[
-        mark=*,
         mark options={scale=0.3, fill=PairedA},
         color=PairedF,
         line width=0.5mm,
@@ -58,7 +60,7 @@
 
     % interaction symmetries acceleration worst case scenario
     \addplot[
-        mark=*,
+        name path=wc,
         mark options={solid, scale=0.3, fill=PairedC},
         color=PairedD,
         line width=0.5mm,
@@ -167,7 +169,7 @@
 
     % interaction symmetries acceleration best case scenario
     \addplot[
-        mark=*,
+        name path=bc,
         mark options={scale=0.3, fill=PairedA},
         color=PairedB,
         line width=0.5mm,
@@ -274,11 +276,18 @@
         (9999.000000, 7.174892)
     };
 
-    \legend{non-accelerated, accelerated (WC), accelerated (BC)}
+    \addplot[
+        fill=PairedA,
+        draw=none
+    ] fill between[
+        of=wc and bc,
+    ];
+
+    \legend{non-accelerated, accelerated (WC\footnotemark[1]), accelerated (BC\footnotemark[1])}
 
     % draw an arrow from A to B
     \draw[->, thick, black]
-    (axis cs:3e2,1e-1) -- (axis cs:1e3,3e-1);
+    (axis cs:2.7e2,1e-1) -- (axis cs:1e3,3e-1);
 
     \node[
       inner sep=0pt,        % no extra padding
@@ -294,7 +303,7 @@
       inner sep=0pt,        % no extra padding
       transform shape        % ensure the node itself isn’t scaled by the axis
     ]
-    at (axis cs:2e2,1e-1)    % this coordinate *is* log-transformed
-    {\includegraphics[width=1cm]{images/rect_mesh.pdf}};
+    at (axis cs:2.2e2,1e-1)    % this coordinate *is* log-transformed
+    {\includegraphics[width=0.7cm]{images/rect_mesh.pdf}};
 \end{axis}
 \end{tikzpicture}

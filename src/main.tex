@@ -16,12 +16,13 @@
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
 
+\usepackage{appendixnumberbeamer}
 
 \bibliography{bib/core}
 \bibliography{bib/extra}
 
 \title{Method of Moments for Analysis of Planar Radiators}
-\subtitle{Uniform rooftop approach and acceleration techniques}
+\subtitle{Uniform Rooftop Approach and Acceleration Techniques}
 
 \author{Tom\'a\v{s} Mach\'a\v{c}ek}
 \date[\today]{\today}
@@ -41,27 +42,27 @@
 % Outline
 \begin{frame}{Outline}
     \begin{columns}
-        \begin{column}[t]{0.45\textwidth}
+        \begin{column}[t]{0.4\textwidth}
             \tableofcontents
         \end{column}
-        \begin{column}[t]{0.55\textwidth}
-            \begin{figure}
+        \begin{column}[t]{0.6\textwidth}
+            \begin{figure}[t]
                 \centering
-                \includegraphics[width = 0.75\textwidth]{images/intro_mesh.pdf}
-                \caption*{Showcase of a solvable discretized radiator of size 500 x 1000 patched used for problems up to $ka = 50$.}
+                \includegraphics[width = 0.9\textwidth]{images/intro_mesh.pdf}
+                \caption*{Showcase of a solvable, discretized radiator mesh of 500 × 1000 patches, suitable for problems with $ka$ up to $50$.}
             \end{figure}
         \end{column}
     \end{columns}
 \end{frame}
 
-\section{The problem description}
-\begin{frame}{The problem description}
-    \begin{itemize}
-        \item Consider antenna topology $\Omega$, composed of a perfect conductor.
-        \item We want to determine the current $\V{J}$ induced by the incident field $\V{E}_{\mathrm{inc}}$.
-        \item The field interaction is encoded by Maxwell's equations.
+\section{Overview of the Problem}
+\begin{frame}{Overview of the Problem}
+    \begin{itemize}[<+->]
+        \item Consider an antenna topology $\varOmega$, composed of a perfect conductor.
+        \item Determine the current field $\V{J}\in\varOmega$ induced by the incident field $\V{E}_{\mathrm{inc}}$.
+        \item The field interaction is encoded by Maxwell's equations\footnote{\fullcite{Maxwell_1865}}.
     \end{itemize}
-    \vspace{1cm}
+    \vspace{0.5cm}
     \begin{figure}
         \centering
         \includegraphics[width=0.5\textwidth]{images/problem_descr.pdf}
@@ -69,21 +70,28 @@
 \end{frame}
 
 \section{Solution via MoM}
-\begin{frame}{Solution via Method-of-Moments paradigm}
-    \begin{itemize}
-        \item Expand the unknown current $\V{J}$ in a selected basis.
-        \begin{equation*}
-            \V{J}(\V{r}') \approx \sum_{j = 1}^{N} [\V{I}_j] \PSIJ(\V{r'})
-        \end{equation*}
-        \item Then the interaction between $\V{J}$ and $\V{E}_{\text{inc}}$ is formulated as a matrix equation.
-        \begin{equation*}
-            \M{Z}\V{I} = \V{V},
-        \end{equation*}
-    \end{itemize}
-    \begin{figure}
-        \centering
-        \includegraphics[width=0.4\textwidth]{images/basis_function.pdf}
-    \end{figure}
+\begin{frame}{Solution via Method-of-Moments\footnotemark[1]~Paradigm}
+    \begin{columns}
+        \begin{column}[t]{0.49\textwidth}
+            \begin{itemize}
+                \item Expand the unknown current $\V{J}$ in a selected basis.
+                \begin{equation*}
+                    \V{J}(\V{r}') \approx \sum_{j = 1}^{N} [\M{I}_j] \boldsymbol{\psi}_j(\V{r'}),
+                \end{equation*}
+                then the interaction between $\V{J}$ and $\V{E}_{\text{inc}}$ is formulated as a matrix equation
+                \begin{equation*}
+                    \M{Z}\M{I} = \M{V} \implies \M{I} = \Zmat^{-1}\M{V}.
+                \end{equation*}
+            \end{itemize}
+        \end{column}
+        \begin{column}[t]{0.49\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[width=0.95\textwidth]{images/basis_function.pdf}
+            \end{figure}
+        \end{column}
+    \end{columns}
+    \footnotetext{\fullcite{Harrington_FieldComputationByMoM}}
 \end{frame}
 
 \begin{comment}
@@ -148,54 +156,83 @@
 
 \section{Acceleration techniques}
 \begin{frame}{Symmetries of the rooftop interactions}
-    \begin{itemize}
+    \begin{itemize}[<+->]
         \item Construct the irreducible parts of the impedance matrix $\Zmat$.
-        \item Reduce the computational effort from $\mathcal{O}(N^2)$ to $\mathcal{O}(N)$
+        \item Reduce the computational effort from $\mathcal{O}(N^2)$ to $\mathcal{O}(N)$.
     \end{itemize}
     \begin{columns}
         \begin{column}[t]{0.49\textwidth}
             \begin{figure}
                 \centering
-                \includegraphics[width=0.8\textwidth]{images/samedir_sym.pdf}
+                \includegraphics[width=0.75\textwidth]{images/samedir_sym.pdf}
             \end{figure}
         \end{column}
         \begin{column}[t]{0.49\textwidth}
             \begin{figure}
                 \centering
-                \includegraphics[width=0.8\textwidth]{images/crossdir_sym.pdf}
+                \includegraphics[width=0.75\textwidth]{images/crossdir_sym.pdf}
             \end{figure}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}{Comparison with the naive implementation - $\M{Z}$ construction}
+\begin{frame}{Comparison with the naive implementation --- $\M{Z}$ construction}
     \begin{figure}[ht]
         \centering
         \input{graphs/classical_vs_interaction_symmetries_accelerated_impedance_matrix.tex}
+        \caption{Time needed for $\Zmat$ assembly on a Intel\textregistered\ Core\textsuperscript{TM} i5-8350U (4C, 8T) @ 3.6\,GHz, 32 GB RAM}
     \end{figure}
+    \footnotetext[1]{WC = worst-case, BC = best-case computational scenarios}
 \end{frame}
 
 \begin{frame}{Convolutional approach}
-    \begin{itemize}
-        \item Exploit symmetries for $\Zmat\V{I}=\V{V}$ solving.
-        \item Switch from matrix to tensor form.
-        \item Model interaction via Green’s convolution.
-        \item Achieve $\mathcal{O}(N\log N)$ time, $\mathcal{O}(N)$ memory.
-    \end{itemize}
-    \vspace{1cm}
-    \[
-        \begin{tikzcd}[ampersand replacement=\&]
-            \C^{(2M - 1)\times(2N - 1)} \arrow[r, "\mathcal{G}_{\xdir\xdir}\text{,}\mathcal{G}_{\ydir\xdir}"] \& \C^{(2M - 1)\times(2N - 1)} \arrow[d, "\mathcal{T}"]\\
-            \arrow[d, swap, "\mathrm{vec}_{K_{\xdir}}"] \arrow[u, "\mathcal{E}"] \C^{M \times N} \& \arrow[d, "\mathrm{vec}_{K_{\xdir}}"] \C^{M \times N} \\
-            \C^{N_\xdir} \arrow[r, "\M{Z}_{\xdir\xdir}\text{,}\M{Z}_{\ydir\xdir}"] \& \C^{N_\xdir}
-        \end{tikzcd}
-        \quad
-        \begin{tikzcd}[ampersand replacement=\&]
-            \C^{(2M - 1)\times(2N - 1)} \arrow[r, "\mathcal{G}_{\xdir\ydir}\text{,}\mathcal{G}_{\ydir\ydir}"] \& \C^{(2M - 1)\times(2N - 1)} \arrow[d, "\mathcal{T}"]\\
-            \arrow[d, swap, "\mathrm{vec}_{K_{\ydir}}"] \arrow[u, "\mathcal{E}"] \C^{M \times N} \& \arrow[d, "\mathrm{vec}_{K_{\ydir}}"] \C^{M \times N} \\
-            \C^{N_\ydir} \arrow[r, "\M{Z}_{\xdir\ydir}\text{,}\M{Z}_{\ydir\ydir}"] \& \C^{N_\ydir}
-        \end{tikzcd}
-    \]
+    \begin{columns}
+        \begin{column}[t]{0.49\textwidth}
+            \begin{itemize}[<+->]
+                \item Exploit symmetries for $\Zmat\M{I}=\M{V}$ solving.
+                \item Switch from matrix $\Zmat$ to its tensor form.
+                \item The Green's operator is our new field operator.
+                \item Achieve $\mathcal{O}(N\log N)$ time via FFT\footnotemark[1], $\mathcal{O}(N)$ memory.
+            \end{itemize}
+        \end{column}
+        \begin{column}[t]{0.49\textwidth}
+            \only<1->{
+            \begin{figure}
+                    \begin{tikzcd}[ampersand replacement=\&, row sep =2em]
+                        % New top layer:
+                        \C^{(2M - 1)\times(2N - 1)} \arrow[r, "\hat{\mathcal{G}}"]
+                            \& \C^{(2M - 1)\times(2N - 1)} \\
+                        % Original first layer:
+                        \C^{(2M - 1)\times(2N - 1)} \arrow[u, "\text{DFT}_2"] \arrow[r, "\mathcal{G}"]
+                            \& \C^{(2M - 1)\times(2N - 1)} \arrow[u, swap, "\text{DFT}_2"] \arrow[d, "\mathcal{T}"] \\
+                        % Middle layer:
+                        \arrow[d, swap, "\mathrm{vec}_{K}"] \arrow[u, "\mathcal{E}"]
+                            \C^{M \times N} \& \arrow[d, "\mathrm{vec}_{K}"] \C^{M \times N} \\
+                        % Bottom layer:
+                        \C^{N} \arrow[r, "\M{Z}"] \& \C^{N}
+                    \end{tikzcd}
+                \caption{Comutative diagram describing the way from classical MoM into convolutional.}
+            \end{figure}
+        }
+        \end{column}
+    \end{columns}
+    \only<4>{\footnotetext{\fullcite{Knuth1997}}}
+\end{frame}
+
+\begin{frame}{RCS for large electrical sizes $ka$}
+    \begin{figure}[ht]
+        \centering
+        \input{graphs/RCS_large.tex}
+    \end{figure}
+    \footnotetext[1]{\fullcite{atom}}
+\end{frame}
+
+\begin{frame}{RCS for large electrical sizes $ka$}
+    \begin{figure}[ht]
+        \centering
+        \input{graphs/RCS_large_excitation.tex}
+    \end{figure}
+    \footnotetext[1]{\fullcite{atom}}
 \end{frame}
 
 \begin{frame}{Accuracy comparison for RCS}
@@ -203,20 +240,7 @@
         \centering
         \input{graphs/RCS_comparison.tex}
     \end{figure}
-\end{frame}
-
-\begin{frame}{RCS for large $ka$ - result}
-    \begin{figure}[ht]
-        \centering
-        \input{graphs/RCS_large.tex}
-    \end{figure}
-\end{frame}
-
-\begin{frame}{RCS for large $ka$ - time}
-    \begin{figure}[ht]
-        \centering
-        \input{graphs/RCS_compTime.tex}
-    \end{figure}
+    \footnotetext[1]{\fullcite{atom}}
 \end{frame}
 
 \section*{Conclusion}
@@ -239,7 +263,9 @@
     {\Huge Questions?}
 \end{frame}
 
-\begin{frame}{Equation formulation}
+\appendix
+
+\begin{frame}{Equation formulation}[noframenumbering]
     \begin{itemize}
         \item The problem can be mathematically formulated using EFIE\footnotemark[1]
     \end{itemize}
@@ -332,6 +358,7 @@
     \end{itemize}
 \end{frame}
 
+\begin{comment}
 \begin{frame}
     \begin{itemize}
         \item  We now compute the contribution over subregion I.
@@ -489,6 +516,7 @@
         &\phantom{\frac{1}{90a^4b^2}\Bigg(}+ 15a^3 b^2 \ln\left(\frac{a + \sqrt{a^2 + b^2}}{b}\right) \Bigg)
     \end{align*}
 \end{frame}
+\end{comment}
 
 \begin{frame}
     \begin{align*}
