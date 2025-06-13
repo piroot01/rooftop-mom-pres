@@ -16,6 +16,7 @@
 \usepackage{tikz-cd}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
+\usetikzlibrary{fit,backgrounds,cd}
 
 \usepackage{appendixnumberbeamer}
 
@@ -257,17 +258,17 @@
 \section*{Conclusion}
 \begin{frame}{Conclusion}
     \begin{columns}
-        \begin{column}[t]{0.6\textwidth}
+        \begin{column}[t]{0.49\textwidth}
             \begin{itemize}[<+->]
                 \item Proposed an efficient method for solving currents on planar structures.
-                \item No direct arbitrary-geometry solver without $\M{Z}$.
+                \item No arbitrary-geometry solver without $\M{Z}$.
                 \item Utilized the convolutional approach in optimization.
             \end{itemize}
             \begin{table}[ht]
                 \centering
-                \begin{tabu} to 0.95\textwidth {X[c] X[c] X[c]}
+                \begin{tabu} to 0.95\textwidth {X[c, 2] X[c, 1] X[c, 1.5]}
                     \toprule
-                    Name & Type & Max. $N$\textsuperscript{\dag} \\ 
+                    Name & Type & Max. $N$\only<1-2>{\textsuperscript{\dag}} \\ 
                     \midrule
                     \textsc{AToM}\footnotemark[1] & direct & $\sim 10^4$ \\ 
                     \textsc{Feko}\footnotemark[2] & direct & $\sim 10^4$  \\ 
@@ -276,20 +277,50 @@
                \end{tabu}
             \end{table}
         \end{column}
-        \begin{column}[t]{0.4\textwidth}
+        \begin{column}[t]{0.49\textwidth}
             \only<3>{
+                \begin{figure}
+                    \centering
+                    \vspace*{-2mm}
+                    \begin{tikzcd}[ampersand replacement=\&, row sep=2em, column sep=3em, remember picture,
+                                     execute at end picture={%
+                        \begin{scope}[on background layer]
+                            % Top bounding box around first row
+                            \node[draw, PairedF, thick, rounded corners, fit=(top1) (top2), inner sep=1pt,
+                                  label=above:{\small optimalization in spectra}] {};
+                            % Bottom bounding box around last row
+                            \node[draw, PairedB, thick, rounded corners, fit=(bot1) (bot2), inner sep=1pt,
+                                  label=below:{\small current optimalization}] {};
+                        \end{scope}%
+                    }]
+                        % New top layer:
+                        |[alias=top1]| \C^{(2M - 1)\times(2N - 1)} \arrow[r, "\hat{\mathcal{G}}"]
+                            \& |[alias=top2]| \C^{(2M - 1)\times(2N - 1)} \\
+                        % Original first layer:
+                        \C^{(2M - 1)\times(2N - 1)} \arrow[u, "\mathrm{DFT}_2"] \arrow[r, "\mathcal{G}"]
+                            \& \C^{(2M - 1)\times(2N - 1)} \arrow[u, swap, "\mathrm{DFT}_2"] \arrow[d, "\mathcal{T}"] \\
+                        % Middle layer:
+                        \C^{M \times N} \arrow[u, "\mathcal{E}"] \arrow[d, swap, "\mathrm{vec}_{K}"]
+                            \& \C^{M \times N} \arrow[d, "\mathrm{vec}_{K}"] \\
+                        % Bottom layer:
+                        |[alias=bot1]| \C^{N} \arrow[r, "\M{Z}"] \& |[alias=bot2]| \C^{N}
+                    \end{tikzcd}
+                \end{figure}
+            }
+            \only<1-2>{
+            \vspace{2mm}
             \begin{figure}
                 \centering
-                \includegraphics[width=0.6\textwidth]{images/spiral_antenna.pdf}
+                \includegraphics[width=0.55\textwidth]{images/spiral_antenna.pdf}
             \end{figure}}
         \end{column}
     \end{columns}
     \footnotetext[1]{\fullcite{atom}}
     \footnotetext[2]{\fullcite{feko}}
-    {
+    \only<1-2>{{
         \renewcommand{\thefootnote}{$\dag$}
         \footnotetext{Assuming the hardware is equipped with 256 GB of RAM.}
-    }
+    }}
 \end{frame}
 
 \section*{Questions}
@@ -301,13 +332,13 @@
 
 \appendix
 
-\begin{frame}{Equation formulation}[noframenumbering]
+\begin{frame}{Equation formulation}
     \begin{itemize}
         \item The problem can be mathematically formulated using EFIE\footnotemark[1]
     \end{itemize}
-    \begin{equation}
-        [\V{E}_{\text{inc}}(\V{r})]_{\text{tan}} = \I\KZ\ZVAC \int\limits_{\Omega} \left(\M{I} + \frac{\nabla \otimes \nabla}{\KZ^2}\right)g(\V{r}, \V{r}')\V{J}(\V{r}')\D{\V{r}'},
-    \end{equation}
+    \begin{equation*}
+        [\V{E}_{\text{inc}}(\V{r})]_{\text{tan}} = \I\KZ\ZVAC \int\limits_{\varOmega} \left(\M{I} + \frac{\nabla \otimes \nabla}{\KZ^2}\right)g(\V{r}, \V{r}')\V{J}(\V{r}')\D{\V{r}'},
+    \end{equation*}
     where $g$ is the 3D scalar Green's function\footnotemark[2].
     \begin{columns}
         \begin{column}[t]{0.49\textwidth}
@@ -324,7 +355,7 @@
             \centering
             \begin{minipage}{\textwidth}
                 \begin{figure}
-                    \includegraphics[width=\textwidth]{images/greens_function.pdf}
+                    \includegraphics[width=0.95\textwidth]{images/greens_function.pdf}
                 \end{figure}
             \end{minipage}
         \end{column}
@@ -337,32 +368,51 @@
 
 \section*{Singularity extraction}
 \begin{frame}{Singular terms}
-    \begin{itemize}
-        \item The singular nature of the green's function.
-        \item The terms when the rooftops overlap.
-    \end{itemize}
-    \vspace{1cm}
     \begin{columns}
         \begin{column}[t]{0.49\textwidth}
-            \begin{figure}
-                \centering
-                \includegraphics[width=0.6\textwidth]{images/singular_terms_i.pdf}
-            \end{figure}
+            \begin{itemize}
+                \item The singular nature of the green's function.
+                \item The terms when the rooftops overlap.
+            \end{itemize}
         \end{column}
         \begin{column}[t]{0.49\textwidth}
+            \centering
+                \begin{block}{Scalar Green's function\footnotemark[1]}
+                    \begin{equation*}
+                        g(\textcolor{PairedF}{\V{r}}, \textcolor{PairedB}{\V{r}'}) = \frac{\mathrm{e}^{-\I\KZ \|\textcolor{PairedF}{\V{r}} - \textcolor{PairedB}{\V{r}'}\|}}{4\uppi\|\textcolor{PairedF}{\V{r}} - \textcolor{PairedB}{\V{r}'}\|}
+                    \end{equation*}
+                \end{block}
+        \end{column}
+    \end{columns}
+    \vspace{1cm}
+    \begin{columns}
+        \begin{column}[t]{0.333\textwidth}
             \begin{figure}
                 \centering
-                \includegraphics[width=0.8\textwidth]{images/singular_terms_ii.pdf}
+                \includegraphics[width=0.8\textwidth]{images/singular_terms_i.pdf}
+            \end{figure}
+        \end{column}
+        \begin{column}[t]{0.333\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[width=\textwidth]{images/singular_terms_ii.pdf}
+            \end{figure}
+        \end{column}
+        \begin{column}[t]{0.333\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[width=0.85\textwidth]{images/singular_terms_iii.pdf}
             \end{figure}
         \end{column}
     \end{columns}
+    \footnotetext[1]{\fullcite{Gibson_MoMinElectromagnetics}}
 \end{frame}
 
 \begin{frame}{Computation of the singular integrals}
     \begin{itemize}
         \item For demonstration purposes, we consider the following extracted integral
         \begin{equation*}
-            \int_{\Omega_i}\int_{\Omega_i} \PSII^{+}(\V{r}) \vdot \PSII^{+}(\V{r}') \frac{1}{\|\V{r} - \V{r}'\|}\D{\V{r}'}\D{\V{r}}.
+            \int_{\varOmega_i}\int_{\varOmega_i} \boldsymbol{\psi}^{+}(\V{r}) \vdot \boldsymbol{\psi}^{+}(\V{r}') \frac{1}{\|\V{r} - \V{r}'\|}\D{\V{r}'}\D{\V{r}}.
         \end{equation*}
         We then apply the transformations $\psi$ and $\phi$ as defined in the thesis.
     \end{itemize}
@@ -391,6 +441,7 @@
         \begin{equation*}
             \mathcal{I}^{(-1)}[\lambda_1\lambda_1'] = \mathcal{I}_{\text{I}}^{(-1)}[\lambda_1\lambda_1'] + \mathcal{I}_{\text{II}}^{(-1)}[\lambda_1\lambda_1'] + \mathcal{I}_{\text{III}}^{(-1)}[\lambda_1\lambda_1'] + \mathcal{I}_{\text{IV}}^{(-1)}[\lambda_1\lambda_1']
         \end{equation*}
+        \item A \Mathematica\ script was developed to automate the evaluation of these singular integrals.
     \end{itemize}
 \end{frame}
 
@@ -552,7 +603,6 @@
         &\phantom{\frac{1}{90a^4b^2}\Bigg(}+ 15a^3 b^2 \ln\left(\frac{a + \sqrt{a^2 + b^2}}{b}\right) \Bigg)
     \end{align*}
 \end{frame}
-\end{comment}
 
 \begin{frame}
     \begin{align*}
@@ -565,6 +615,7 @@
         \item A \Mathematica\ script was developed to automate the evaluation of these singular integrals.
     \end{itemize}
 \end{frame}
+\end{comment}
 
 \begin{frame}{Singularity extraction strength}
     \begin{itemize}

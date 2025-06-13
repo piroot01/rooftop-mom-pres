@@ -97,7 +97,7 @@
            \end{scope}
         }
 
-        \draw[fill = PairedG] (\dx, 0, 0) -- (2*\dx, 0, 0) -- (2*\dx, \dy, 0) -- (\dx, \dy, 0) -- cycle;
+        \draw[fill = lightgray, opacity = 0.8] (\dx, 0, 0) -- (2*\dx, 0, 0) -- (2*\dx, \dy, 0) -- (\dx, \dy, 0) -- cycle;
 
         \foreach \x in {0,\dx,...,\cx} {
             \foreach \y in {0} {
@@ -113,6 +113,6 @@
         }
 
         \drawroofshapex{PairedF}{0}{0}
-        \drawroofshapex{PairedF}{1*\dx}{0}
+        \drawroofshapex{PairedB}{1*\dx}{0}
     \end{tikzpicture}
 \end{document}
