@@ -10,6 +10,7 @@
 \newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}} % Centered column type
 
 \usepackage{amsmath,amssymb}
+\usepackage{bm}
 
 \usepackage{tikz}
 \usepackage{tikz-cd}
@@ -127,7 +128,7 @@
 \end{frame}
 \end{comment}
 
-\begin{frame}{Rooftops restrictions}
+\begin{frame}{Rooftops Restrictions}
     \begin{itemize}
         \item We impose a set of rules to enable faster algorithm development.
         \begin{enumerate}[(i)]
@@ -143,7 +144,7 @@
     \end{figure}
 \end{frame}
 
-\begin{frame}{Multiple patches}
+\begin{frame}{Multiple Patches}
     \begin{itemize}
         \item For multiple patches (array antennas), we assign each patch its own local coordinate system.
     \end{itemize}
@@ -154,8 +155,8 @@
     \end{figure}
 \end{frame}
 
-\section{Acceleration techniques}
-\begin{frame}{Symmetries of the rooftop interactions}
+\section{Acceleration Techniques}
+\begin{frame}{Symmetries of the Rooftop Interactions}
     \begin{itemize}[<+->]
         \item Construct the irreducible parts of the impedance matrix $\Zmat$.
         \item Reduce the computational effort from $\mathcal{O}(N^2)$ to $\mathcal{O}(N)$.
@@ -176,7 +177,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{Comparison with the naive implementation --- $\M{Z}$ construction}
+\begin{frame}{Comparison With the Naive Implementation --- $\M{Z}$ construction}
     \begin{figure}[ht]
         \centering
         \input{graphs/classical_vs_interaction_symmetries_accelerated_impedance_matrix.tex}
@@ -185,7 +186,7 @@
     \footnotetext[1]{WC = worst-case, BC = best-case computational scenarios}
 \end{frame}
 
-\begin{frame}{Convolutional approach}
+\begin{frame}{Convolutional Approach}
     \begin{columns}
         \begin{column}[t]{0.49\textwidth}
             \begin{itemize}[<+->]
@@ -211,7 +212,7 @@
                         % Bottom layer:
                         \C^{N} \arrow[r, "\M{Z}"] \& \C^{N}
                     \end{tikzcd}
-                \caption{Comutative diagram describing the way from classical MoM into convolutional.}
+                \caption{A commutative diagram connecting MoM realizations: the bottom path is the direct MoM and the top path is the convolutional (FFT‑accelerated) MoM.}
             \end{figure}
         }
         \end{column}
@@ -219,7 +220,7 @@
     \only<4>{\footnotetext{\fullcite{Knuth1997}}}
 \end{frame}
 
-\begin{frame}{RCS for large electrical sizes $ka$}
+\begin{frame}{RCS for Large Electrical Sizes $ka$}
     \begin{figure}[ht]
         \centering
         \input{graphs/RCS_large.tex}
@@ -227,7 +228,7 @@
     \footnotetext[1]{\fullcite{atom}}
 \end{frame}
 
-\begin{frame}{RCS for large electrical sizes $ka$}
+\begin{frame}{RCS for Large Electrical Sizes $ka$}
     \begin{figure}[ht]
         \centering
         \input{graphs/RCS_large_excitation.tex}
@@ -235,7 +236,15 @@
     \footnotetext[1]{\fullcite{atom}}
 \end{frame}
 
-\begin{frame}{Accuracy comparison for RCS}
+\begin{frame}{RCS for Large Electrical Sizes $ka$}
+    \begin{figure}[ht]
+        \centering
+        \input{graphs/RCS_large_rcs.tex}
+    \end{figure}
+    \footnotetext[1]{\fullcite{atom}}
+\end{frame}
+
+\begin{frame}{Accuracy Comparison for RCS}
     \begin{figure}[ht]
         \centering
         \input{graphs/RCS_comparison.tex}
@@ -245,15 +254,36 @@
 
 \section*{Conclusion}
 \begin{frame}{Conclusion}
-    \begin{itemize}
-        \item Validated symmetry-based solution.
-        \item No direct arbitrary-geometry solver without $\M{Z}$.
-        \item Explore convolutional approach for rank-1 perturbations.
-    \end{itemize}
-    \begin{figure}
-        \centering
-        \includegraphics[width=0.25\textwidth]{images/spiral_antenna.pdf}
-    \end{figure}
+    \begin{columns}
+        \begin{column}[t]{0.6\textwidth}
+            \begin{itemize}[<+->]
+                \item Proposed an efficient method for solving currents on planar structures.
+                \item No direct arbitrary-geometry solver without $\M{Z}$.
+                \item Utilized the convolutional approach in optimization.
+            \end{itemize}
+            \begin{table}[ht]
+                \centering
+                \begin{tabu} to 0.95\textwidth {X[c] X[c] X[c]}
+                    \toprule
+                    Name & Type & Max. $N$ \\ 
+                    \midrule
+                    \textsc{AToM}\footnotemark[1] & direct & $\approx10^4$ \\ 
+                    \textsc{Feko}\footnotemark[2] & direct & $\approx10^4$  \\ 
+                    rooftop-mom & iterative & {$\approx\bm{10^8}$} \\
+                    \bottomrule
+               \end{tabu}
+            \end{table}
+        \end{column}
+        \begin{column}[t]{0.4\textwidth}
+            \only<3>{
+            \begin{figure}
+                \centering
+                \includegraphics[width=0.6\textwidth]{images/spiral_antenna.pdf}
+            \end{figure}}
+        \end{column}
+    \end{columns}
+    \footnotetext[1]{\fullcite{atom}}
+    \footnotetext[2]{\fullcite{feko}}
 \end{frame}
 
 \section*{Questions}
