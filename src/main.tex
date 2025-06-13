@@ -199,19 +199,21 @@
         \begin{column}[t]{0.49\textwidth}
             \only<1->{
             \begin{figure}
-                    \begin{tikzcd}[ampersand replacement=\&, row sep =2em]
-                        % New top layer:
-                        \C^{(2M - 1)\times(2N - 1)} \arrow[r, "\hat{\mathcal{G}}"]
-                            \& \C^{(2M - 1)\times(2N - 1)} \\
-                        % Original first layer:
-                        \C^{(2M - 1)\times(2N - 1)} \arrow[u, "\text{DFT}_2"] \arrow[r, "\mathcal{G}"]
-                            \& \C^{(2M - 1)\times(2N - 1)} \arrow[u, swap, "\text{DFT}_2"] \arrow[d, "\mathcal{T}"] \\
-                        % Middle layer:
-                        \arrow[d, swap, "\mathrm{vec}_{K}"] \arrow[u, "\mathcal{E}"]
-                            \C^{M \times N} \& \arrow[d, "\mathrm{vec}_{K}"] \C^{M \times N} \\
-                        % Bottom layer:
-                        \C^{N} \arrow[r, "\M{Z}"] \& \C^{N}
-                    \end{tikzcd}
+                \centering
+                \vspace*{-2mm}
+                \begin{tikzcd}[ampersand replacement=\&, row sep =2em]
+                    % New top layer:
+                    \C^{(2M - 1)\times(2N - 1)} \arrow[r, "\hat{\mathcal{G}}"]
+                        \& \C^{(2M - 1)\times(2N - 1)} \\
+                    % Original first layer:
+                    \C^{(2M - 1)\times(2N - 1)} \arrow[u, "\text{DFT}_2"] \arrow[r, "\mathcal{G}"]
+                        \& \C^{(2M - 1)\times(2N - 1)} \arrow[u, swap, "\text{DFT}_2"] \arrow[d, "\mathcal{T}"] \\
+                    % Middle layer:
+                    \arrow[d, swap, "\mathrm{vec}_{K}"] \arrow[u, "\mathcal{E}"]
+                        \C^{M \times N} \& \arrow[d, "\mathrm{vec}_{K}"] \C^{M \times N} \\
+                    % Bottom layer:
+                    \C^{N} \arrow[r, "\M{Z}"] \& \C^{N}
+                \end{tikzcd}
                 \caption{A commutative diagram connecting MoM realizations: the bottom path is the direct MoM and the top path is the convolutional (FFT‑accelerated) MoM.}
             \end{figure}
         }
@@ -265,11 +267,11 @@
                 \centering
                 \begin{tabu} to 0.95\textwidth {X[c] X[c] X[c]}
                     \toprule
-                    Name & Type & Max. $N$ \\ 
+                    Name & Type & Max. $N$\textsuperscript{\dag} \\ 
                     \midrule
-                    \textsc{AToM}\footnotemark[1] & direct & $\approx10^4$ \\ 
-                    \textsc{Feko}\footnotemark[2] & direct & $\approx10^4$  \\ 
-                    rooftop-mom & iterative & {$\approx\bm{10^8}$} \\
+                    \textsc{AToM}\footnotemark[1] & direct & $\sim 10^4$ \\ 
+                    \textsc{Feko}\footnotemark[2] & direct & $\sim 10^4$  \\ 
+                    rooftop-mom & iterative & {$\sim \bm{10^8}$} \\
                     \bottomrule
                \end{tabu}
             \end{table}
@@ -284,6 +286,10 @@
     \end{columns}
     \footnotetext[1]{\fullcite{atom}}
     \footnotetext[2]{\fullcite{feko}}
+    {
+        \renewcommand{\thefootnote}{$\dag$}
+        \footnotetext{Assuming hardware equipped with 256 GB RAM.}
+    }
 \end{frame}
 
 \section*{Questions}
