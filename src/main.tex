@@ -159,20 +159,23 @@
 \section{Acceleration Techniques}
 \begin{frame}{Symmetries of the Rooftop Interactions}
     \begin{itemize}[<+->]
-        \item Construct the irreducible parts of the impedance matrix $\Zmat$.
+        \item Construct the irreducible parts $\ZmatM$, $\ZmatE$ of the impedance matrix $\Zmat = \ZmatM - \ZmatE$.
         \item Reduce the computational effort from $\mathcal{O}(N^2)$ to $\mathcal{O}(N)$.
     \end{itemize}
+    \vspace*{-5mm}
     \begin{columns}
         \begin{column}[t]{0.49\textwidth}
             \begin{figure}
                 \centering
                 \includegraphics[width=0.75\textwidth]{images/samedir_sym.pdf}
+                \caption{Symmetries applicable to both $\ZmatM$ and $\ZmatE$.}
             \end{figure}
         \end{column}
         \begin{column}[t]{0.49\textwidth}
             \begin{figure}
                 \centering
                 \includegraphics[width=0.75\textwidth]{images/crossdir_sym.pdf}
+                \caption{Additional symmetries applicable only to $\ZmatE$.}
             \end{figure}
         \end{column}
     \end{columns}
@@ -182,9 +185,9 @@
     \begin{figure}[ht]
         \centering
         \input{graphs/classical_vs_interaction_symmetries_accelerated_impedance_matrix.tex}
-        \caption{Time needed for $\Zmat$ assembly on a Intel\textregistered\ Core\textsuperscript{TM} i5-8350U (4C, 8T) @ 3.6\,GHz, 32 GB RAM}
+        \caption{Time needed for $\Zmat$ assembly on a Intel\textregistered\ Core\textsuperscript{TM} i5-8350U (4C, 8T) @ 3.6\,GHz, 32 GB RAM.}
     \end{figure}
-    \footnotetext[1]{WC = worst-case, BC = best-case computational scenarios}
+    \footnotetext[1]{WC: worst‐case, BC: best‐case computational scenarios.}
 \end{frame}
 
 \begin{frame}{Convolutional Approach}
@@ -251,6 +254,15 @@
     \begin{figure}[ht]
         \centering
         \input{graphs/RCS_comparison.tex}
+    \end{figure}
+    \footnotetext[1]{\fullcite{atom}}
+\end{frame}
+
+\begin{frame}{RCS Computational Time}
+    \begin{figure}[ht]
+        \centering
+        \input{graphs/RCS_compTime.tex}
+        \caption{Measured on a system with an AMD Ryzen Threadripper 1950X (16 cores, 3.40 GHz), NVIDIA~GeForce~GTX~1080, and 128 GB RAM.}
     \end{figure}
     \footnotetext[1]{\fullcite{atom}}
 \end{frame}
@@ -332,14 +344,14 @@
 
 \appendix
 
-\begin{frame}{Equation formulation}
+\begin{frame}{Formulation of the Equation}
     \begin{itemize}
         \item The problem can be mathematically formulated using EFIE\footnotemark[1]
     \end{itemize}
     \begin{equation*}
         [\V{E}_{\text{inc}}(\V{r})]_{\text{tan}} = \I\KZ\ZVAC \int\limits_{\varOmega} \left(\M{I} + \frac{\nabla \otimes \nabla}{\KZ^2}\right)g(\V{r}, \V{r}')\V{J}(\V{r}')\D{\V{r}'},
     \end{equation*}
-    where $g$ is the 3D scalar Green's function\footnotemark[2].
+    where $g$ is the scalar Green's function\footnotemark[2].
     \begin{columns}
         \begin{column}[t]{0.49\textwidth}
             \centering
@@ -366,12 +378,12 @@
 \end{frame}
 
 
-\section*{Singularity extraction}
-\begin{frame}{Singular terms}
+\section*{Singularity Extraction}
+\begin{frame}{Singular Terms}
     \begin{columns}
         \begin{column}[t]{0.49\textwidth}
             \begin{itemize}
-                \item The singular nature of the green's function.
+                \item The singular nature of the Green's function\footnotemark[1].
                 \item The terms when the rooftops overlap.
             \end{itemize}
         \end{column}
@@ -408,7 +420,23 @@
     \footnotetext[1]{\fullcite{Gibson_MoMinElectromagnetics}}
 \end{frame}
 
-\begin{frame}{Computation of the singular integrals}
+\begin{frame}{Singularity Extraction}
+    \begin{itemize}
+        \item The cornerstone is the Taylor series\footnote[1]{\fullcite{Handbook_of_Mathematial_functions}} of the scalar Green’s function,
+        \begin{equation*}
+            g(\V{r}, \V{r}') = \frac{1}{4\uppi}\sum_{q=-1}^{\infty} \frac{(-\I\KZ)^{q+1}}{(q+1)!}\|\V{r} - \V{r}'\|^{q},
+        \end{equation*}
+        \item All odd-power terms in this expansion are non-smooth at $\V{r} = \V{r}'$.
+        \item We considered the first two odd terms of the expansion.
+        \begin{equation*}
+            g(\V{r}, \V{r}') = g_{\text{s}}(\V{r}, \V{r}') + \frac{1}{4\uppi}R^{-1} - \frac{\KZ^2}{8\uppi}R,
+        \end{equation*}
+        where $g_{\text{s}} \in C^1(\R^3 \times \R^3)$.
+    \item Integrals containing $g_\text{s}$ is evaluated numerically, $\lim_{R \to 0} g_{\text{s}}(R) = -\I\KZ/(4\uppi)$ when $\V{r} = \V{r}'$.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Singular Integral Computation}
     \begin{itemize}
         \item For demonstration purposes, we consider the following extracted integral
         \begin{equation*}
@@ -617,33 +645,14 @@
 \end{frame}
 \end{comment}
 
-\begin{frame}{Singularity extraction strength}
-    \begin{itemize}
-        \item What is the benefit of a stronger extraction?
-        \item The cornerstone is the Taylor series of the scalar Green’s function,
-        \begin{equation*}
-            g(\V{r}, \V{r}') = \frac{1}{4\uppi}\sum_{q=-1}^{\infty} \frac{(-\I\KZ)^{q+1}}{(q+1)!}\|\V{r} - \V{r}'\|^{q},
-        \end{equation*}
-        \item All odd-power terms in this expansion are non-smooth at $\V{r} = \V{r}'$.
-        \item We considered the first two odd terms of the expansion.
-        \begin{equation*}
-            g(\V{r}, \V{r}') = g_{\text{s}}(\V{r}, \V{r}') + \frac{1}{4\uppi}R^{-1} - \frac{\KZ^2}{8\uppi}R,
-        \end{equation*}
-        where
-        \begin{equation*}
-            g_{\text{s}}(\V{r}, \V{r}') = \frac{1}{4\uppi} \left(\frac{\mathrm{e}^{-\I\KZ R}}{R} -\frac{1}{R} + \frac{\KZ^2 R}{2}\right).
-        \end{equation*}
-        \item Integral containing $g_s$ can be evaluated numerically $\lim_{R \to 0} g_{\text{s}}(R) = -\I\KZ/(4\uppi)$ when $\V{r} = \V{r}'$.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Singularity extraction strength comparison}
+\begin{frame}{Singularity Extraction Strength Comparison}
     \begin{figure}[ht]
         \centering
         \input{graphs/singularity_extraction_strength_comparison.tex}
     \end{figure}
 \end{frame}
 
+\begin{comment}
 \begin{frame}{Comparison of the memory demands of the $\Zmat$ and $\mathcal{G}$}
     \begin{figure}[ht]
         \centering
@@ -667,5 +676,7 @@
 
 \begin{frame}{Rank-1 perturbations of the convolutional kernel}
 \end{frame}
+
+\end{comment}
 
 \end{document}

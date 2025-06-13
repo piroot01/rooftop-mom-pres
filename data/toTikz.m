@@ -34,7 +34,9 @@ end
 
 %export_fig_to_tikz(['Fig_RCS_comparison.fig'])
 %export_fig_to_tikz(['Fig_2Drect_RCS.fig'])
-export_fig_to_tikz('Fig_2Drect_compTime.fig')
+%export_fig_to_tikz('Fig_2Drect_compTime.fig')
 
-hFig = openfig('Fig_2Drect_compTime.fig');
-    
+%hFig = openfig('Fig_2Drect_compTime.fig');
+
+load RCS_AToM_ka_0p1_20_31samples.mat
+RCS
