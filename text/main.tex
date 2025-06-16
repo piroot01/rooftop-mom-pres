@@ -1,0 +1,50 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin = 1in]{geometry}
+
+\begin{document}
+    \begin{itemize}
+        \item \textbf{1. slide}: Dobrý den, já jsem Tomáš Macháček a přišel jsem vám představit svoji bakalářskou práci, která se týká analýzy planárních zářičů pomocí numerických metod.
+        \item \textbf{2. slide}: Předměty v přírodě mají obecně vlastnost vyzařování při expozici elektromagnetické vlny. Pokud tuto vlastnostlépe pochopíme, dokážeme konstruovat účinnější antény, například pro stabilněší bezdrátovou komunikaci. Cílem tedy bylo navrhnout metodu, která nám umožní další studium antén. V čem naše metoda vyniká je efektivní a rychlé řešení masivních zářičů.
+        \item \textbf{3. slide}:
+            \begin{itemize}
+                \item Nyní přejdeme ke konkrétní formulaci úlohy. Náš zářič bude planární a zhotoven z perfektního vodiče elektrického proudu.
+                \item Anténa bude vystavena elektrické intenzitě, která na povrchu antény indukuje proud J, jeho rozložení budeme považovat jako výsledek.
+                \item Interakce mezi excitací a proudem je dána Maxwellovými rovnicemi.
+            \end{itemize}
+        \item \textbf{4. slide}: K řešení použijeme metodu momentů. V principu jde o to, že projektujeme proud do známé báze. My jsme zvolili rooftopové bázové funkce. Název pochází z tvaru jejich vektorového pole připomínající štít střechy. Poté je úloha zapsatelná jako soustava lineárních rovnic, na slidu zapsaná maticově. Takzvané direct solvery, řeší úlohu tak, že najdou inverzi impedanční matice a dosazením obdrží řešení. Tento přístup má dva hlavní problémy, za prvé jelikož je impedanční matice hustá, nelze ji efektivně uložit do paměti, její velikost roste kvadraticky. A zadruhé nalezaní inverze je výpočetnš náročné.
+        \item \textbf{5. slide}: Omezíme-li se na rovnoměrnou diskretizaci zářiče do pravoúhlé mřížky o elementárních rozměrech a krát b, můžeme, jak posléze uvidíme, velmi urychlit výpočet jak impedanční matice, tak i samotné řešení.
+        \item \textbf{6. slide}: To ovšem neznamená, že se omezujeme na jednodeskové zářiče. Vícedeskové zářiče řešit též umíme, jenom metody akcelerace, ktéré představím budou aplikovatelné pouze na interakce zářiče sama se sebou.
+        \item \textbf{7. slide}:
+            \begin{itemize}
+                \item Podstatou mých akceleračních technik je fakt, že existují symetrie, pod kterými je hodnota impedance interakce nezměněna. S jejich využitím jsme schopni sestavit ireducibilní části magnetické a elektrické části impedanční matice. Na ilustraci vydíme symetrie pro rooftopy ve stejném a kolmém směru.
+                \item Výpočet se nám z kvadratického stane lineární.
+            \end{itemize}
+        \item \textbf{8. slide}: Zde jsou vyneseny grafy závislosti času k sestavení impedanční matice na počtu bázových funkcí. Červeně je zanesena neakcelerovaná varianta a zelenou a modrou potom akcelerované. Zajímavé je sledovat závislost tvaru diskretizace na výpočetním času u akcelerovaných průběhů.
+        \item \textbf{9. slide}: 
+            \begin{itemize}
+                \item Přejděme k meritu věci. Sice jsme schopni účinně sestavit impedanční matici, ale otázka efektivního řešení soustavy zůstává nezopovězena. Ukazuje se, že lze opět využít představené symetrie. 
+                \item Přejdeme od maticového zápisu k tenzorové formulaci. Z impedanční matice na impedanční tenzor, který vykazuje Toeplitzovu strukturu. Takovéto soustavy je možno řešit pomocí cyklické konvoluce.
+                \item Konvolučnímu jádru budeme říkat Greenův operátor a je to v podstatě tvořen ireducibilní částí impedanční matice.
+                \item Konvoluci řešíme efektivně prostřednictvím rychlé Fourierovy transformace. K řešení poté používáme iterativní metodu konjugovaných gradientů s využitím spektrálního prekondicionálu.
+            \end{itemize}
+        \item \textbf{10. slide}: Pojďme se podívat na graf závislosti RCS, radar cross section, na elektrické velikosti antény. Elektrická velikost je bezrozměrný parametr, který kombinuje vlnovou délku excitace s geometrickou velikostí antény.
+        \item \textbf{11. slide}: K excitaci jsme použili kolmo dopadající planární vlnu o polarizaci ve směru delší strany antény. Ta má poměr délek stran jedna ku dvoum, kratší zarovnanou s osou x.
+        \item \textbf{12. slide}: Parametr RCS udává velikost imaginární dokonale odrazivé plochy, na níž dopadá isotropicky vyzářený výkon, a ten je stejný jako na přijímači, radaru. Umožnůje tak určit, jak je daný objekt viditelný radarem. Na grafu jsou barvou podbarveny jednotlivé sekce průběhu, podle toho jaký fenomén tam nastává. Pro velmi malé zářiče v porovnání s vlnovou délkou, se uplatňuje obdoba Rayleighova rozpylu. Pro srovnatelné velikosti vidíme rezonance a pro velmi velké zářiče se začínají uplatňovat zákony paprskové optiky a anténa se chová jako elektromagnetické zrcadlo.
+        \item \textbf{13. slide}: Zde je výřez předchozího grafu, na němž ilustrujeme přesnost metody v porovnání s AToMem. Jedná se o toolbox do matlabu, který je vyvíjí tady na fakultě ČVUT týmem CEM.
+        \item \textbf{14. slide}: Abychom si udělali představu o tom, jak je solver rychlý, předkládáme výpočetní časy k nalezení řešení. Je vidět, že i mnohamilionové systémy jsme schopni řesit v rámci pár minut.
+        \item \textbf{15. slide}:
+            \begin{itemize}
+                \item Představili jsme si efektivní metodu řešení proudú na rozlehlých planárních zářičích. Pro ukázku ještě srovnáváme maximální realizovatelné systémy pro direct solvery a náš iterativní.
+                \item Stojí za zmínku říct, že současně nejsme schopni řešit srbitrární planární struktury bez znamlosti impedanční matice, tedy konvolučně.
+                \item V budoucnu bych se chtěl věnovat použití konvoluční metody v optimalizačních úlohách. Současně probíhá optimalizace na spodním patru konvolučního diagramu, avšak kdybychom byli schopni už optimalizovat ve spektru, horní patro komutativního diagramu, bylo by to velmi efektivní.
+            \end{itemize}
+        \item \textbf{16. slide}: Máte někdo nějaké otázky?
+        \item \textbf{17. slide}: K tomu, abychom lépe porozuměli problému singularit, si představíme integrální rovnici popisující interakci excitace a proudu, takzvaná EFIE. Člen, který je zoodpovědný za singulární chování je skalární Greenova funkce g.
+        \item \textbf{18. slide}: Greenova funkce se stává singulární, když se definiční obory dvou rooftopů překryjí. Poté při numerické integraci takovéto členy divergují.
+        \item \textbf{19. slide}: Řešení, které jsem zvolil nese název extrakce singularity. Klíčové je pozorování Taylorova rozvoje Greenovy funkce, kde zjistíme, že za singulárním chováním stojí liché členy rozvoje. Jejich extrakcí je přesuneme do singulárních integrálů a ochuzený integrál má nyní singularitu odstranitelnou.
+        \item \textbf{20. slide}: Pro ilustraci zde ukážeme způsob řešení extrahovaného singulárního integrálu. Začneme tím, že převedeme integrční doménu do barycentrických souřadnic. Z plošného integrálu se tak stanou čtyři čtverné liniové integrály.
+        \item \textbf{21. slide}: K jejich výpočtu jsme použili Wolfram Mathematicu.
+        \item \textbf{22. slide}: Teoreticky jsme schopni extrahovat libovolné množství členů a získat jejich analytický vztah. Praktickým důsledkem je poté rychlejší konvergence numerické integrace.
+    \end{itemize}
+\end{document}
