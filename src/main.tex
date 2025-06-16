@@ -30,7 +30,7 @@
 \date[\today]{\today}
 
 \institute{
-    Czech Technical University in Prague\\Prague\\Czech Republic\\
+    Czech Technical University in Prague\\Czech Republic\\
     \href{mailto:machat16@fel.cvut.cz}{\nolinkurl{machat16@fel.cvut.cz}}
 }
 
@@ -62,13 +62,13 @@
     \begin{itemize}[<+->]
         \item Consider an antenna topology $\varOmega$, composed of a perfect conductor.
         \item Determine the current field $\V{J}\in\varOmega$ induced by the incident field $\V{E}_{\mathrm{inc}}$.
-        \item The field interaction is encoded by Maxwell's equations\footnote{\fullcite{Maxwell_1865}}.
+        \item The field interaction is encoded by Maxwell's equations\footnotemark[1].
     \end{itemize}
-    \vspace{0.5cm}
     \begin{figure}
         \centering
         \includegraphics[width=0.5\textwidth]{images/problem_descr.pdf}
     \end{figure}
+    \only<3>{\footnotetext[1]{\fullcite{Maxwell_1865}}}
 \end{frame}
 
 \section{Solution via MoM}
@@ -76,7 +76,7 @@
     \begin{columns}
         \begin{column}[t]{0.49\textwidth}
             \begin{itemize}
-                \item Expand the unknown current $\V{J}$ in a selected basis.
+                \item Expand the unknown current $\V{J}$ in a selected basis
                 \begin{equation*}
                     \V{J}(\V{r}') \approx \sum_{j = 1}^{N} [\M{I}_j] \boldsymbol{\psi}_j(\V{r'}),
                 \end{equation*}
@@ -93,7 +93,7 @@
             \end{figure}
         \end{column}
     \end{columns}
-    \footnotetext{\fullcite{Harrington_FieldComputationByMoM}}
+    \footnotetext[1]{\fullcite{Harrington_FieldComputationByMoM}}
 \end{frame}
 
 \begin{comment}
@@ -129,9 +129,9 @@
 \end{frame}
 \end{comment}
 
-\begin{frame}{Rooftops Restrictions}
+\begin{frame}{Rooftop Restrictions}
     \begin{itemize}
-        \item We impose a set of rules to enable faster algorithm development.
+        \item We impose a set of rules that will enable us to develop faster algorithms.
         \begin{enumerate}[(i)]
             \item $\UV{e}_i^{+/-} \in \{\UV{x},\UV{y}\in\R^3:\,\UV{x},\UV{y}\}$
             \item $l_i = l_x = a$ iff $\UV{e}_i^{+/-} = \UV{x}$
@@ -196,7 +196,7 @@
             \begin{itemize}[<+->]
                 \item Exploit symmetries for $\Zmat\M{I}=\M{V}$ solving.
                 \item Switch from matrix $\Zmat$ to its tensor form.
-                \item The Green's operator is our new field operator.
+                \item The Green's operator $\mathcal{G}$ is our new field operator.
                 \item Achieve $\mathcal{O}(N\log N)$ time via FFT\footnotemark[1], $\mathcal{O}(N)$ memory.
             \end{itemize}
         \end{column}
@@ -223,7 +223,7 @@
         }
         \end{column}
     \end{columns}
-    \only<4>{\footnotetext{\fullcite{Knuth1997}}}
+    \only<4>{\footnotetext[1]{\fullcite{Knuth1997}}}
 \end{frame}
 
 \begin{frame}{RCS for Large Electrical Sizes $ka$}
@@ -250,7 +250,7 @@
     \footnotetext[1]{\fullcite{atom}}
 \end{frame}
 
-\begin{frame}{Accuracy Comparison for RCS}
+\begin{frame}{Accuracy Comparison of RCS Computation Methods}
     \begin{figure}[ht]
         \centering
         \input{graphs/RCS_comparison.tex}
@@ -258,16 +258,16 @@
     \footnotetext[1]{\fullcite{atom}}
 \end{frame}
 
-\begin{frame}{RCS Computational Time}
+\begin{frame}{RCS Computational Time --- rooftop-mom}
     \begin{figure}[ht]
         \centering
         \input{graphs/RCS_compTime.tex}
-        \caption{Measured on a system with an AMD Ryzen Threadripper 1950X (16 cores, 3.40 GHz), NVIDIA~GeForce~GTX~1080, and 128 GB RAM.}
+        \caption{Measured on a system with an AMD Ryzen Threadripper 1950X (16 cores, 3.40 GHz), 128 GB RAM.}
     \end{figure}
-    \footnotetext[1]{\fullcite{atom}}
+    \footnotetext[1]{Current vector $\M{I}$ was computed with a tolerance of $10^{-9}$.}
 \end{frame}
 
-\section*{Conclusion}
+\section{Conclusion}
 \begin{frame}{Conclusion}
     \begin{columns}
         \begin{column}[t]{0.49\textwidth}
@@ -344,6 +344,7 @@
 
 \appendix
 
+\section*{Appendix}
 \begin{frame}{Formulation of the Equation}
     \begin{itemize}
         \item The problem can be mathematically formulated using EFIE\footnotemark[1]
@@ -377,17 +378,15 @@
     \footnotetext[2]{\fullcite{Gibson_MoMinElectromagnetics}}
 \end{frame}
 
-
-\section*{Singularity Extraction}
 \begin{frame}{Singular Terms}
     \begin{columns}
-        \begin{column}[t]{0.49\textwidth}
+        \begin{column}[t]{0.6\textwidth}
             \begin{itemize}
                 \item The singular nature of the Green's function\footnotemark[1].
-                \item The terms when the rooftops overlap.
+                \item The contributions when rooftop supports overlap.
             \end{itemize}
         \end{column}
-        \begin{column}[t]{0.49\textwidth}
+        \begin{column}[t]{0.4\textwidth}
             \centering
                 \begin{block}{Scalar Green's function\footnotemark[1]}
                     \begin{equation*}
@@ -422,25 +421,25 @@
 
 \begin{frame}{Singularity Extraction}
     \begin{itemize}
-        \item The cornerstone is the Taylor series\footnote[1]{\fullcite{Handbook_of_Mathematial_functions}} of the scalar Green’s function,
+        \item The cornerstone is the Taylor expansion\footnote[1]{\fullcite{Handbook_of_Mathematial_functions}} of the scalar Green’s function,
         \begin{equation*}
-            g(\V{r}, \V{r}') = \frac{1}{4\uppi}\sum_{q=-1}^{\infty} \frac{(-\I\KZ)^{q+1}}{(q+1)!}\|\V{r} - \V{r}'\|^{q},
+            g(\V{r}, \V{r}') = \frac{1}{4\uppi}\sum_{q=-1}^{\infty} \frac{(-\I\KZ)^{q+1}}{(q+1)!}\|\V{r} - \V{r}'\|^{q}.
         \end{equation*}
         \item All odd-power terms in this expansion are non-smooth at $\V{r} = \V{r}'$.
-        \item We considered the first two odd terms of the expansion.
+        \item We consider the first two odd terms of the expansion
         \begin{equation*}
             g(\V{r}, \V{r}') = g_{\text{s}}(\V{r}, \V{r}') + \frac{1}{4\uppi}R^{-1} - \frac{\KZ^2}{8\uppi}R,
         \end{equation*}
-        where $g_{\text{s}} \in C^1(\R^3 \times \R^3)$.
-    \item Integrals containing $g_\text{s}$ is evaluated numerically, $\lim_{R \to 0} g_{\text{s}}(R) = -\I\KZ/(4\uppi)$ when $\V{r} = \V{r}'$.
+            where $R = \|\V{r} - \V{r}'\|$ and $g_{\text{s}} \in C^1(\R^3 \times \R^3 \setminus \diag(\R^3))$.
+    \item Integrals containing $g_\text{s}$ are evaluated numerically, $\lim_{R \to 0} g_{\text{s}}(R) = -\I\KZ/(4\uppi)$ when $\V{r} = \V{r}'$.
     \end{itemize}
 \end{frame}
 
 \begin{frame}{Singular Integral Computation}
     \begin{itemize}
-        \item For demonstration purposes, we consider the following extracted integral
+        \item For illustrative purposes, we consider the following extracted integral
         \begin{equation*}
-            \int_{\varOmega_i}\int_{\varOmega_i} \boldsymbol{\psi}^{+}(\V{r}) \vdot \boldsymbol{\psi}^{+}(\V{r}') \frac{1}{\|\V{r} - \V{r}'\|}\D{\V{r}'}\D{\V{r}}.
+            \mathcal{I}^{(-1)} = \int_{\varOmega_i}\int_{\varOmega_i} \boldsymbol{\psi}^{+}(\V{r}) \vdot \boldsymbol{\psi}^{+}(\V{r}') \frac{1}{\|\V{r} - \V{r}'\|}\D{\V{r}'}\D{\V{r}}.
         \end{equation*}
         We then apply the transformations $\psi$ and $\phi$ as defined in the thesis.
     \end{itemize}
@@ -454,7 +453,7 @@
     \begin{itemize}
         \item Under the assumption of a uniform orthogonal mesh on the radiator and $a,b>0$, the integral splits into four contributions of the form
         \begin{equation*}
-            a^2b^2 \int\int\int\int \frac{(u + \lambda_1')\lambda_1'}{\sqrt{a^2 u^2 + b^2 v^2}}\dd{\lambda_1'}\dd{v}\dd{u}.
+            a^2b^2 \int\int\int\int \frac{(u + \lambda_1')\lambda_1'}{\sqrt{a^2 u^2 + b^2 v^2}}\dd{\lambda_2'}\dd{\lambda_1'}\dd{v}\dd{u}.
         \end{equation*}
         The corresponding limits in each subregion are:
         \[
@@ -467,9 +466,9 @@
         \]
         Hence
         \begin{equation*}
-            \mathcal{I}^{(-1)}[\lambda_1\lambda_1'] = \mathcal{I}_{\text{I}}^{(-1)}[\lambda_1\lambda_1'] + \mathcal{I}_{\text{II}}^{(-1)}[\lambda_1\lambda_1'] + \mathcal{I}_{\text{III}}^{(-1)}[\lambda_1\lambda_1'] + \mathcal{I}_{\text{IV}}^{(-1)}[\lambda_1\lambda_1']
+            \mathcal{I}^{(-1)}[\lambda_1\lambda_1'] = \mathcal{I}_{\text{I}}^{(-1)}[\lambda_1\lambda_1'] + \mathcal{I}_{\text{II}}^{(-1)}[\lambda_1\lambda_1'] + \mathcal{I}_{\text{III}}^{(-1)}[\lambda_1\lambda_1'] + \mathcal{I}_{\text{IV}}^{(-1)}[\lambda_1\lambda_1'].
         \end{equation*}
-        \item A \Mathematica\ script was developed to automate the evaluation of these singular integrals.
+    \item A \textsc{Mathematica}\footnote{\fullcite{Mathematica}} script was developed to automate the evaluation of these singular integrals.
     \end{itemize}
 \end{frame}
 
